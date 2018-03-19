@@ -1,6 +1,7 @@
 # stm32-ssd1306
 
-STM32 library for working with OLED LCDs based on SSD1306, supports I2C and SPI.
+STM32 library for working with OLED LCDs based on SSD1306, supports I2C and
+4-wire SPI.
 
 Tested on STM32F1 and STM32F4 MCUs, with 4 random LCDs from eBay. Probably will
 work with other MCUs and LCDs based on SH1106 or SSD1309.
