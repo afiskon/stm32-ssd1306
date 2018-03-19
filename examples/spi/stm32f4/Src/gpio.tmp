@@ -1,0 +1,54 @@
+
+#n/** Configure pins as #n #t#t #t* Analog #n #t#t #t* Input #n #t#t #t* Output#n #t#t #t* EVENT_OUT#n #t#t #t* EXTI
+#t#t PA2#t ------> USART2_TX
+#t#t PA3#t ------> USART2_RX
+#t#t PB8#t ------> I2C1_SCL
+#t#t PB9#t ------> I2C1_SDA
+*/
+static void MX_GPIO_Init(void)
+{
+#n
+#tGPIO_InitTypeDef GPIO_InitStruct;
+#n#t/* GPIO Ports Clock Enable */
+#t__HAL_RCC_GPIOC_CLK_ENABLE();
+#t__HAL_RCC_GPIOH_CLK_ENABLE();
+#t__HAL_RCC_GPIOA_CLK_ENABLE();
+#t__HAL_RCC_GPIOB_CLK_ENABLE();
+#n#t/*Configure GPIO pin Output Level */
+#tHAL_GPIO_WritePin(GPIOA, LD2_Pin|GPIO_PIN_8, GPIO_PIN_RESET);
+#n#t/*Configure GPIO pin Output Level */
+#tHAL_GPIO_WritePin(GPIOB, GPIO_PIN_12|GPIO_PIN_14, GPIO_PIN_RESET);
+#n#t/*Configure GPIO pin : B1_Pin */
+#tGPIO_InitStruct.Pin = B1_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tHAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+#n#t/*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
+#tGPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+#tGPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+#tHAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+#n#t/*Configure GPIO pins : LD2_Pin PA8 */
+#tGPIO_InitStruct.Pin = LD2_Pin|GPIO_PIN_8;
+#tGPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+#tHAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+#n#t/*Configure GPIO pins : PB12 PB14 */
+#tGPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_14;
+#tGPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+#tHAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#n#t/*Configure GPIO pins : PB8 PB9 */
+#tGPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
+#tGPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+#tGPIO_InitStruct.Pull = GPIO_PULLUP;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+#tGPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+#tHAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+#n
+}
+#n

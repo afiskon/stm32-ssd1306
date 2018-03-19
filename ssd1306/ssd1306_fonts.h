@@ -1,12 +1,8 @@
+#include <stdint.h>
 
-#include "stm32f4xx_hal.h"
+#ifndef __SSD1306_FONTS_H__
+#define __SSD1306_FONTS_H__
 
-#ifndef Fonts
-#define Fonts
-
-//
-//	Structure om font te definieren
-//
 typedef struct {
 	const uint8_t FontWidth;    /*!< Font width in pixels */
 	uint8_t FontHeight;   /*!< Font height in pixels */
@@ -14,12 +10,8 @@ typedef struct {
 } FontDef;
 
 
-//
-//	De 3 fonts
-//
 extern FontDef Font_7x10;
 extern FontDef Font_11x18;
 extern FontDef Font_16x26;
 
-#endif
-
+#endif // __SSD1306_FONTS_H__

@@ -1,7 +1,5 @@
 
-#include "fonts.h"
-
-// Dit zijn de bitmaps voor de 3 verschillende fonts
+#include "ssd1306_fonts.h"
 
 static const uint16_t Font7x10 [] = {
 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,  // sp
@@ -298,9 +296,6 @@ static const uint16_t Font16x26 [] = {
 };
 
 
-//
-//	De typedefs voor de 3 fonts
-//
 FontDef Font_7x10 = {7,10,Font7x10};
 FontDef Font_11x18 = {11,18,Font11x18};
 FontDef Font_16x26 = {16,26,Font16x26};

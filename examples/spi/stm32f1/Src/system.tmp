@@ -1,0 +1,24 @@
+#n
+#t__HAL_RCC_AFIO_CLK_ENABLE();
+#n
+#tHAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);#n
+#t/* System interrupt init*/
+#t/* MemoryManagement_IRQn interrupt configuration */
+#tNVIC_SetPriority(MemoryManagement_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* BusFault_IRQn interrupt configuration */
+#tNVIC_SetPriority(BusFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* UsageFault_IRQn interrupt configuration */
+#tNVIC_SetPriority(UsageFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* SVCall_IRQn interrupt configuration */
+#tNVIC_SetPriority(SVCall_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* DebugMonitor_IRQn interrupt configuration */
+#tNVIC_SetPriority(DebugMonitor_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* PendSV_IRQn interrupt configuration */
+#tNVIC_SetPriority(PendSV_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* SysTick_IRQn interrupt configuration */
+#tNVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#n
+#t#t/**NOJTAG: JTAG-DP Disabled and SW-DP Enabled #n#t#t*/
+#t__HAL_AFIO_REMAP_SWJ_NOJTAG();
+#n
+#n

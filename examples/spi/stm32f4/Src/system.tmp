@@ -1,0 +1,20 @@
+#n
+#n
+#tHAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_0);#n
+#t/* System interrupt init*/
+#t/* MemoryManagement_IRQn interrupt configuration */
+#tNVIC_SetPriority(MemoryManagement_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* BusFault_IRQn interrupt configuration */
+#tNVIC_SetPriority(BusFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* UsageFault_IRQn interrupt configuration */
+#tNVIC_SetPriority(UsageFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* SVCall_IRQn interrupt configuration */
+#tNVIC_SetPriority(SVCall_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* DebugMonitor_IRQn interrupt configuration */
+#tNVIC_SetPriority(DebugMonitor_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* PendSV_IRQn interrupt configuration */
+#tNVIC_SetPriority(PendSV_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#t/* SysTick_IRQn interrupt configuration */
+#tNVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+#n
+#n

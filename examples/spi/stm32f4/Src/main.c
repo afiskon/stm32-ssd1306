@@ -3,16 +3,11 @@
 #include "stm32f4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
-
-#include "ssd1306.h"
-#include "fonts.h"
-
+#include "ssd1306_tests.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c1;
-
-UART_HandleTypeDef huart2;
+SPI_HandleTypeDef hspi2;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
@@ -22,8 +17,7 @@ UART_HandleTypeDef huart2;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_I2C1_Init(void);
-static void MX_USART2_UART_Init(void);
+static void MX_SPI2_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -31,81 +25,8 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
-#include <string.h>
-
-void I2C_Scan() {
-    char info[] = "Scanning I2C bus...\r\n";
-    HAL_UART_Transmit(&huart2, (uint8_t*)info, strlen(info), HAL_MAX_DELAY);
-
-    HAL_StatusTypeDef res;
-    for(uint16_t i = 0; i < 128; i++) {
-        res = HAL_I2C_IsDeviceReady(&hi2c1, i << 1, 1, 10);
-        if(res == HAL_OK) {
-            char msg[64];
-            snprintf(msg, sizeof(msg), "0x%02X", i);
-            HAL_UART_Transmit(&huart2, (uint8_t*)msg, strlen(msg), HAL_MAX_DELAY);
-        } else {
-            HAL_UART_Transmit(&huart2, (uint8_t*)".", 1, HAL_MAX_DELAY);
-        }
-    }
-
-    HAL_UART_Transmit(&huart2, (uint8_t*)"\r\n", 2, HAL_MAX_DELAY);
-}
-
-void test_fonts() {
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(2, 0);
-	ssd1306_WriteString("Font 16x26", Font_16x26, White);
-	ssd1306_SetCursor(2, 26);
-	ssd1306_WriteString("Font 11x18", Font_11x18, White);
-	ssd1306_SetCursor(2, 26+18);
-	ssd1306_WriteString("Font 7x10", Font_7x10, White);
-	ssd1306_UpdateScreen();
-}
-
-void test_fps() {
-	ssd1306_Fill(White);
-
-	uint32_t start = HAL_GetTick();
-	uint32_t end = start;
-	int fps = 0;
-	char message[] = "ABCDEFGHIJK";
-
-	ssd1306_SetCursor(2,0);
-	ssd1306_WriteString("Testing...", Font_11x18, Black);
-
-	do {
-		ssd1306_SetCursor(2, 18);
-		ssd1306_WriteString(message, Font_11x18, Black);
-		ssd1306_UpdateScreen();
-
-		char ch = message[0];
-		memmove(message, message+1, sizeof(message)-2);
-		message[sizeof(message)-2] = ch;
-
-		fps++;
-		end = HAL_GetTick();
-	} while((end - start) < 5000);
-
-    HAL_Delay(1000);
-
-	char buff[64];
-	fps = (float)fps / ((end - start) / 1000.0);
-	snprintf(buff, sizeof(buff), "~%d FPS", fps);
-
-	ssd1306_Fill(White);
-	ssd1306_SetCursor(2, 18);
-	ssd1306_WriteString(buff, Font_11x18, Black);
-	ssd1306_UpdateScreen();
-}
-
 void init() {
-    I2C_Scan();
-	ssd1306_Init();
-
-	test_fps();
-	HAL_Delay(3000);
-	test_fonts();
+	ssd1306_TestAll();
 }
 
 void loop() {
@@ -139,8 +60,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
-  MX_USART2_UART_Init();
+  MX_SPI2_Init();
 
   /* USER CODE BEGIN 2 */
 
@@ -217,41 +137,24 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
-/* I2C1 init function */
-static void MX_I2C1_Init(void)
+/* SPI2 init function */
+static void MX_SPI2_Init(void)
 {
 
-  hi2c1.Instance = I2C1;
-//  hi2c1.Init.ClockSpeed = 100000; // 9 FPS
-//  hi2c1.Init.ClockSpeed = 100000 * 2; // 19 FPS
-  hi2c1.Init.ClockSpeed = 100000 * 4; // 37 FPS
-  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
-  hi2c1.Init.OwnAddress1 = 0;
-  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
-  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
-  hi2c1.Init.OwnAddress2 = 0;
-  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
-  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
-  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-}
-
-/* USART2 init function */
-static void MX_USART2_UART_Init(void)
-{
-
-  huart2.Instance = USART2;
-  huart2.Init.BaudRate = 9600;
-  huart2.Init.WordLength = UART_WORDLENGTH_8B;
-  huart2.Init.StopBits = UART_STOPBITS_1;
-  huart2.Init.Parity = UART_PARITY_NONE;
-  huart2.Init.Mode = UART_MODE_TX_RX;
-  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart2) != HAL_OK)
+  /* SPI2 parameter configuration*/
+  hspi2.Instance = SPI2;
+  hspi2.Init.Mode = SPI_MODE_MASTER;
+  hspi2.Init.Direction = SPI_DIRECTION_1LINE;
+  hspi2.Init.DataSize = SPI_DATASIZE_8BIT;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi2.Init.CRCPolynomial = 10;
+  if (HAL_SPI_Init(&hspi2) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
@@ -264,6 +167,10 @@ static void MX_USART2_UART_Init(void)
         * Output
         * EVENT_OUT
         * EXTI
+     PA2   ------> USART2_TX
+     PA3   ------> USART2_RX
+     PB8   ------> I2C1_SCL
+     PB9   ------> I2C1_SDA
 */
 static void MX_GPIO_Init(void)
 {
@@ -277,7 +184,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LD2_Pin|GPIO_PIN_8, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12|GPIO_PIN_14, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -285,12 +195,35 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD2_Pin */
-  GPIO_InitStruct.Pin = LD2_Pin;
+  /*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
+  GPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LD2_Pin PA8 */
+  GPIO_InitStruct.Pin = LD2_Pin|GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB12 PB14 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_14;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB8 PB9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_8|GPIO_PIN_9;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
