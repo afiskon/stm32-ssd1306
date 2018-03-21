@@ -4,6 +4,7 @@
 
 /* USER CODE BEGIN Includes */
 #include "ssd1306_tests.h"
+#include "ssd1306.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -27,10 +28,32 @@ static void MX_SPI2_Init(void);
 /* USER CODE BEGIN 0 */
 void init() {
     ssd1306_TestAll();
+
+/*
+    HAL_Delay(3000);
+
+    for(uint8_t y = 0; y < 64; y++) {
+        if(!(y&1)) { continue; }
+
+        for(uint8_t x = 0; x < 128; x++) {
+          ssd1306_DrawPixel(x, y, White);
+        } 
+    }
+
+    for(uint8_t x = 0; x < 128; x++) {
+        if(!(x&1)) { continue; }
+
+        for(uint8_t y = 0; y < 64; y++) {
+          ssd1306_DrawPixel(x, y, White);
+        } 
+    }
+
+    ssd1306_UpdateScreen();
+*/
 }
 
 void loop() {
-	HAL_Delay(100);
+    HAL_Delay(100);
 }
 
 /* USER CODE END 0 */
