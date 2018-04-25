@@ -1,6 +1,35 @@
 #include "ssd1306.h"
 #include <string.h>
 
+void ssd1306_TestBorder() {
+    ssd1306_Fill(Black);
+   
+    uint32_t start = HAL_GetTick();
+    uint32_t end = start;
+    uint8_t x = 0;
+    uint8_t y = 0;
+    do {
+        ssd1306_DrawPixel(x, y, Black);
+
+        if((y == 0) && (x < 127))
+            x++;
+        else if((x == 127) && (y < 63))
+            y++;
+        else if((y == 63) && (x > 0)) 
+            x--;
+        else
+            y--;
+
+        ssd1306_DrawPixel(x, y, White);
+        ssd1306_UpdateScreen();
+    
+        HAL_Delay(5);
+        end = HAL_GetTick();
+    } while((end - start) < 8000);
+   
+    HAL_Delay(1000);
+}
+
 void ssd1306_TestFonts() {
     ssd1306_Fill(Black);
     ssd1306_SetCursor(2, 0);
@@ -52,5 +81,6 @@ void ssd1306_TestAll() {
     ssd1306_Init();
     ssd1306_TestFPS();
     HAL_Delay(3000);
+    ssd1306_TestBorder();
     ssd1306_TestFonts();
 }
