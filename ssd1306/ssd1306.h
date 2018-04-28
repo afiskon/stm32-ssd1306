@@ -67,7 +67,7 @@ extern SPI_HandleTypeDef SSD1306_SPI_PORT;
 #error "You should define SSD1306_USE_SPI or SSD1306_USE_I2C macro!"
 #endif
 
-// SSD1306 LCD height in pixels
+// SSD1306 OLED height in pixels
 #ifndef SSD1306_HEIGHT
 #define SSD1306_HEIGHT          64
 #endif
@@ -83,7 +83,7 @@ extern SPI_HandleTypeDef SSD1306_SPI_PORT;
 // Enumeration for screen colors
 typedef enum {
     Black = 0x00, // Black color, no pixel
-    White = 0x01  // Pixel is set. Color depends on LCD
+    White = 0x01  // Pixel is set. Color depends on OLED
 } SSD1306_COLOR;
 
 // Struct to store transformations
