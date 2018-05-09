@@ -13,3 +13,6 @@ Please see `examples` directory and `ssd1306/ssd1306.h` for more details.
 The code is based on
 [4ilo/ssd1306-stm32HAL](https://github.com/4ilo/ssd1306-stm32HAL) library
 developed by Olivier Van den Eede ( [@4ilo](https://github.com/4ilo) ) in 2016.
+
+
+See also: https://github.com/afiskon/stm32-st7735
