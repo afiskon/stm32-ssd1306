@@ -13,4 +13,7 @@ The code is based on
 [4ilo/ssd1306-stm32HAL](https://github.com/4ilo/ssd1306-stm32HAL) library
 developed by Olivier Van den Eede ( [@4ilo](https://github.com/4ilo) ) in 2016.
 
-See also: https://github.com/afiskon/stm32-st7735
+See also:
+
+* https://github.com/afiskon/stm32-st7735
+* https://github.com/afiskon/stm32-ili9341
