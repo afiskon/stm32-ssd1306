@@ -123,30 +123,6 @@ void ssd1306_Init(void) {
     ssd1306_WriteCommand(0x14); //
     ssd1306_WriteCommand(0xAF); //--turn on SSD1306 panel
 
-/*
-    // For SH1106
-    // see http://we.easyelectronics.ru/lcd_gfx/oled-sh1106.html
-    ssd1306_WriteCommand(0xAE); //display off
-
-    ssd1306_WriteCommand(0xA8); // Set Multiplex Ratio (0x3F) - CHECK
-    ssd1306_WriteCommand(0x3F);
-
-    ssd1306_WriteCommand(0x81); // Set Contrast Control (0x7f) - CHECK
-    ssd1306_WriteCommand(0x7F);
-
-    ssd1306_WriteCommand(0xA1); // Set Segment Re-map - CHECK
-    ssd1306_WriteCommand(0xC0); // Set Common Output Scan Direction (i.e. reverset)
-    
-    ssd1306_WriteCommand(0xDA); // Common Pads Hardware Configuration (Alternative Mode Set) - CHECK
-    ssd1306_WriteCommand(0x12);
-    
-    ssd1306_WriteCommand(0xD3); // Set Display Offset (0x00) - CHECK
-    ssd1306_WriteCommand(0x00);
-
-    ssd1306_WriteCommand(0x40); // Set Display Start Line 0 - CHECK
-
-    ssd1306_WriteCommand(0xAF); //--turn on SSD1306 panel
-*/
     // Clear screen
     ssd1306_Fill(Black);
     
