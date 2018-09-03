@@ -15,5 +15,6 @@ developed by Olivier Van den Eede ( [@4ilo](https://github.com/4ilo) ) in 2016.
 
 See also:
 
+* https://github.com/afiskon/stm32-ssd1351
 * https://github.com/afiskon/stm32-st7735
 * https://github.com/afiskon/stm32-ili9341
