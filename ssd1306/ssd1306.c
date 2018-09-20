@@ -20,7 +20,7 @@ void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
 
 void ssd1306_Reset(void) {
 	// CS = High (not selected)
-	HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_CS_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET);
 
 	// Reset the OLED
 	HAL_GPIO_WritePin(SSD1306_Reset_Port, SSD1306_Reset_Pin, GPIO_PIN_RESET);
