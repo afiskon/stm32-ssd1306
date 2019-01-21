@@ -1,5 +1,10 @@
 #include "ssd1306.h"
 
+// Screenbuffer
+static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+static uint8_t SSD1306_Buffer_old[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+
+
 #if defined(SSD1306_USE_I2C)
 
 void ssd1306_Reset(void) {
@@ -49,9 +54,6 @@ void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
 #error "You should define SSD1306_USE_SPI or SSD1306_USE_I2C macro"
 #endif
 
-
-// Screenbuffer
-static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 
 // Screen object
 static SSD1306_t SSD1306;
@@ -126,6 +128,10 @@ void ssd1306_Init(void) {
     // Clear screen
     ssd1306_Fill(Black);
     
+    for(uint32_t i = 0; i < sizeof(SSD1306_Buffer); i++) {
+		SSD1306_Buffer_old[i] = ~SSD1306_Buffer[i]; // inverted to force a full refresh
+	}
+
     // Flush buffer to screen
     ssd1306_UpdateScreen();
     
@@ -141,19 +147,56 @@ void ssd1306_Fill(SSD1306_COLOR color) {
     /* Set memory */
     uint32_t i;
 
-    for(i = 0; i < sizeof(SSD1306_Buffer); i++) {
-        SSD1306_Buffer[i] = (color == Black) ? 0x00 : 0xFF;
+    if (color == Black)
+    {
+    	for(i = 0; i < sizeof(SSD1306_Buffer); i++)
+    	{
+    		SSD1306_Buffer[i] = 0x00;
+		}
+    }
+    else
+    {
+    	for(i = 0; i < sizeof(SSD1306_Buffer); i++)
+    	{
+    		SSD1306_Buffer[i] = 0xFF;
+		}
     }
 }
 
 // Write the screenbuffer with changed to the screen
 void ssd1306_UpdateScreen(void) {
-    uint8_t i;
-    for(i = 0; i < 8; i++) {
-        ssd1306_WriteCommand(0xB0 + i);
-        ssd1306_WriteCommand(0x00);
-        ssd1306_WriteCommand(0x10);
-        ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*i],SSD1306_WIDTH);
+    int i;
+    int j;
+
+    for (i = 0; i < 8; i++)
+    {
+    	int offset = SSD1306_WIDTH*i;
+
+    	int first_change_at = -1;
+    	for (j = 0; j < SSD1306_WIDTH; j++)
+    	{
+    		int offset_2 = offset + j;
+    		if (SSD1306_Buffer[offset_2] != SSD1306_Buffer_old[offset_2])
+    		{
+    			first_change_at = j;
+    			break;
+    		}
+    	}
+
+    	if (first_change_at != -1)
+    	{
+			ssd1306_WriteCommand(0xB0 + i);
+			ssd1306_WriteCommand(0x00);
+			ssd1306_WriteCommand(0x10);
+
+			ssd1306_WriteData(&SSD1306_Buffer[offset], SSD1306_WIDTH);
+
+			for (j = first_change_at; j < SSD1306_WIDTH; j++)
+			{
+				int offset_2 = offset + j;
+				SSD1306_Buffer_old[offset_2] = SSD1306_Buffer[offset_2];
+			}
+    	}
     }
 }
 
