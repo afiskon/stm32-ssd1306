@@ -8,12 +8,21 @@
 #ifndef __SSD1306_H__
 #define __SSD1306_H__
 
+//#define STM32F1
+//#define STM32F4
+//#define STM32L4
+
+//#define SSD1306_USE_I2C
+//#define SSD1306_USE_SPI
+
 #if defined(STM32F1)
 #include "stm32f1xx_hal.h"
 #elif defined(STM32F4)
 #include "stm32f4xx_hal.h"
+#elif defined(STM32L4)
+#include "stm32l4xx_hal.h"
 #else
-#error "SSD1306 library was tested only on STM32F1 and STM32F4 MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
+#error "SSD1306 library was tested only on STM32F1,STM32F4 MCU and STM32L4 families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
 #endif
 
 #include "ssd1306_fonts.h"
@@ -33,28 +42,28 @@
 /* vvv SPI config vvv */
 
 #ifndef SSD1306_SPI_PORT
-#define SSD1306_SPI_PORT        hspi2
+#define SSD1306_SPI_PORT        hspi1
 #endif
 
 #ifndef SSD1306_CS_Port
-#define SSD1306_CS_Port         GPIOB
+#define SSD1306_CS_Port         GPIOA
 #endif
 #ifndef SSD1306_CS_Pin
 #define SSD1306_CS_Pin          GPIO_PIN_12
 #endif
 
 #ifndef SSD1306_DC_Port
-#define SSD1306_DC_Port         GPIOB
+#define SSD1306_DC_Port         GPIOA
 #endif
 #ifndef SSD1306_DC_Pin
-#define SSD1306_DC_Pin          GPIO_PIN_14
+#define SSD1306_DC_Pin          GPIO_PIN_11
 #endif
 
 #ifndef SSD1306_Reset_Port
 #define SSD1306_Reset_Port      GPIOA
 #endif
 #ifndef SSD1306_Reset_Pin
-#define SSD1306_Reset_Pin       GPIO_PIN_8
+#define SSD1306_Reset_Pin       GPIO_PIN_10
 #endif
 
 /* ^^^ SPI config ^^^ */
