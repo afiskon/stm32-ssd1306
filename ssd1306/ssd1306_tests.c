@@ -1,5 +1,6 @@
 #include "ssd1306.h"
 #include <string.h>
+#include <stdio.h>
 
 void ssd1306_TestBorder() {
     ssd1306_Fill(Black);
