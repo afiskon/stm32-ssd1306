@@ -8,6 +8,8 @@
 #ifndef __SSD1306_H__
 #define __SSD1306_H__
 
+#include <stddef.h>
+
 #if defined(STM32F1)
 #include "stm32f1xx_hal.h"
 #elif defined(STM32F4)
