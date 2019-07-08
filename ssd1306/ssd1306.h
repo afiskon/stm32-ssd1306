@@ -8,12 +8,16 @@
 #ifndef __SSD1306_H__
 #define __SSD1306_H__
 
+#include <stddef.h>
+
 #if defined(STM32F1)
 #include "stm32f1xx_hal.h"
 #elif defined(STM32F4)
 #include "stm32f4xx_hal.h"
+#elif defined(STM32L4)
+#include "stm32l4xx_hal.h"
 #else
-#error "SSD1306 library was tested only on STM32F1 and STM32F4 MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
+#error "SSD1306 library was tested only on STM32F1, STM32F4, STM32L4 MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
 #endif
 
 #include "ssd1306_fonts.h"
