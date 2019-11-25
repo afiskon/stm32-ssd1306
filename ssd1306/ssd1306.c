@@ -181,15 +181,15 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color) {
 }
 
 // Draw 1 char to the screen buffer
-// ch         => char om weg te schrijven
+// ch       => char om weg te schrijven
 // Font     => Font waarmee we gaan schrijven
-// color     => Black or White
+// color    => Black or White
 char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color) {
     uint32_t i, b, j;
     
     // Check remaining space on current line
-    if (SSD1306_WIDTH <= (SSD1306.CurrentX + Font.FontWidth) ||
-        SSD1306_HEIGHT <= (SSD1306.CurrentY + Font.FontHeight))
+    if (SSD1306_WIDTH < (SSD1306.CurrentX + Font.FontWidth) ||
+        SSD1306_HEIGHT < (SSD1306.CurrentY + Font.FontHeight))
     {
         // Not enough space on current line
         return 0;
