@@ -68,8 +68,8 @@ void ssd1306_Init(void) {
     ssd1306_WriteCommand(0xAE); //display off
 
     ssd1306_WriteCommand(0x20); //Set Memory Addressing Mode   
-    ssd1306_WriteCommand(0x10); // 00,Horizontal Addressing Mode; 01,Vertical Addressing Mode;
-                                // 10,Page Addressing Mode (RESET); 11,Invalid
+    ssd1306_WriteCommand(0x00); // 00b,Horizontal Addressing Mode; 01b,Vertical Addressing Mode;
+                                // 10b,Page Addressing Mode (RESET); 11b,Invalid
 
     ssd1306_WriteCommand(0xB0); //Set Page Start Address for Page Addressing Mode,0-7
 
