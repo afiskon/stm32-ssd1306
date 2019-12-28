@@ -39,6 +39,8 @@ void ssd1306_TestFonts() {
     ssd1306_WriteString("Font 11x18", Font_11x18, White);
     ssd1306_SetCursor(2, 26+18);
     ssd1306_WriteString("Font 7x10", Font_7x10, White);
+    ssd1306_SetCursor(2, 26+18+10);
+    ssd1306_WriteString("Font 6x8", Font_6x8, White);
     ssd1306_UpdateScreen();
 }
 
