@@ -18,3 +18,5 @@ See also:
 * https://github.com/afiskon/stm32-ssd1351
 * https://github.com/afiskon/stm32-st7735
 * https://github.com/afiskon/stm32-ili9341
+
+There is a [DuyTrandeLion/nrf52-ssd1309](https://github.com/DuyTrandeLion/nrf52-ssd1309) port to nRF52 of this library made by @DuyTrandeLion.
