@@ -9,6 +9,9 @@
 #define __SSD1306_H__
 
 #include <stddef.h>
+#include <_ansi.h>
+
+_BEGIN_STD_C
 
 #if defined(STM32F1)
 #include "stm32f1xx_hal.h"
@@ -117,5 +120,7 @@ void ssd1306_SetCursor(uint8_t x, uint8_t y);
 void ssd1306_Reset(void);
 void ssd1306_WriteCommand(uint8_t byte);
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size);
+
+_END_STD_C
 
 #endif // __SSD1306_H__
