@@ -3,7 +3,7 @@
 STM32 library for working with OLEDs based on SSD1306, SH1106 and SSD1309,
 supports I2C and 4-wire SPI.
 
-Tested on STM32F1, STM32F3, STM32F4, STM32L0, STM32L4 and STM32H7 MCUs, with 10 random displays from eBay.
+Tested on STM32F1, STM32F3, STM32F4, STM32L0, STM32L4, STM32F7 and STM32H7 MCUs, with 10 random displays from eBay.
 Also this code is known to work with
 [afiskon/fpga-ssd1306-to-vga](https://github.com/afiskon/fpga-ssd1306-to-vga).
 
