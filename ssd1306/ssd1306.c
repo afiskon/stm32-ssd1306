@@ -99,7 +99,14 @@ void ssd1306_Init(void) {
     ssd1306_WriteCommand(0xA6); //--set normal color
 #endif
 
+// Set multiplex ratio.
+#if (SSD1306_HEIGHT == 128)
+    // Found in the Luma Python lib for SH1106.
+    ssd1306_WriteCommand(0xFF);
+#else
     ssd1306_WriteCommand(0xA8); //--set multiplex ratio(1 to 64) - CHECK
+#endif
+
 #if (SSD1306_HEIGHT == 32)
     ssd1306_WriteCommand(0x1F); //
 #elif (SSD1306_HEIGHT == 64)
