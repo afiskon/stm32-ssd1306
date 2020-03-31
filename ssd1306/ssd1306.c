@@ -99,13 +99,22 @@ void ssd1306_Init(void) {
     ssd1306_WriteCommand(0xA6); //--set normal color
 #endif
 
+// Set multiplex ratio.
+#if (SSD1306_HEIGHT == 128)
+    // Found in the Luma Python lib for SH1106.
+    ssd1306_WriteCommand(0xFF);
+#else
     ssd1306_WriteCommand(0xA8); //--set multiplex ratio(1 to 64) - CHECK
+#endif
+
 #if (SSD1306_HEIGHT == 32)
     ssd1306_WriteCommand(0x1F); //
 #elif (SSD1306_HEIGHT == 64)
     ssd1306_WriteCommand(0x3F); //
+#elif (SSD1306_HEIGHT == 128)
+    ssd1306_WriteCommand(0x3F); // Seems to work for 128px high displays too.
 #else
-#error "Only 32 or 64 lines of height are supported!"
+#error "Only 32, 64, or 128 lines of height are supported!"
 #endif
 
     ssd1306_WriteCommand(0xA4); //0xa4,Output follows RAM content;0xa5,Output ignores RAM content
@@ -124,8 +133,10 @@ void ssd1306_Init(void) {
     ssd1306_WriteCommand(0x02);
 #elif (SSD1306_HEIGHT == 64)
     ssd1306_WriteCommand(0x12);
+#elif (SSD1306_HEIGHT == 128)
+    ssd1306_WriteCommand(0x12);
 #else
-#error "Only 32 or 64 lines of height are supported!"
+#error "Only 32, 64, or 128 lines of height are supported!"
 #endif
 
     ssd1306_WriteCommand(0xDB); //--set vcomh
@@ -160,9 +171,14 @@ void ssd1306_Fill(SSD1306_COLOR color) {
 
 // Write the screenbuffer with changed to the screen
 void ssd1306_UpdateScreen(void) {
-    uint8_t i;
-    for(i = 0; i < 8; i++) {
-        ssd1306_WriteCommand(0xB0 + i);
+    // Write data to each page of RAM. Number of pages
+    // depends on the screen height:
+    //
+    //  * 32px   ==  4 pages
+    //  * 64px   ==  8 pages
+    //  * 128px  ==  16 pages
+    for(uint8_t i = 0; i < SSD1306_HEIGHT/8; i++) {
+        ssd1306_WriteCommand(0xB0 + i); // Set the current RAM page address.
         ssd1306_WriteCommand(0x00);
         ssd1306_WriteCommand(0x10);
         ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*i],SSD1306_WIDTH);
