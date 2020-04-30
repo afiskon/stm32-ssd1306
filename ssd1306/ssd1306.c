@@ -1,4 +1,6 @@
 #include "ssd1306.h"
+#include <math.h>
+#include <stdlib.h>
 
 #if defined(SSD1306_USE_I2C)
 
@@ -267,4 +269,119 @@ char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color) {
 void ssd1306_SetCursor(uint8_t x, uint8_t y) {
     SSD1306.CurrentX = x;
     SSD1306.CurrentY = y;
+}
+// Draw line
+/*There is used Besier's algorithm
+ */
+void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
+  int32_t deltaX = abs(x2 - x1);
+  int32_t deltaY = abs(y2 - y1);
+  int32_t signX = ((x1 < x2) ? 1 : -1);
+  int32_t signY = ((y1 < y2) ? 1 : -1);
+  int32_t error = deltaX - deltaY;
+  int32_t error2;
+	
+  ssd1306_DrawPixel(x2, y2, color);
+	while((x1 != x2) || (y1 != y2))
+	{
+    ssd1306_DrawPixel(x1, y1, color);
+    error2 = error * 2;
+    if(error2 > -deltaY)
+    {
+      error -= deltaY;
+      x1 += signX;
+    }
+    else
+    {
+    /*nothing to do*/
+    }
+		
+    if(error2 < deltaX)
+    {
+      error += deltaX;
+      y1 += signY;
+    }
+    else
+    {
+    /*nothing to do*/
+    }
+  }
+  return;
+}
+//Draw polyline
+void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD1306_COLOR color) {
+  uint16_t i;
+  if(par_vertex != 0){
+    for(i = 1; i < par_size; i++){
+      ssd1306_Line(par_vertex[i - 1].x, par_vertex[i - 1].y, par_vertex[i].x, par_vertex[i].y, color);
+    }
+  }
+  else
+  {
+    /*nothing to do*/
+  }
+  return;
+}
+/*Convert Degrees to Radians*/
+static float ssd1306_DegToRad(float par_deg) {
+	return par_deg * 3.14 / 180.0;
+}
+/*Normalize degree to [0;360]*/
+static uint16_t ssd1306_NormalizeTo0_360(uint16_t par_deg) {
+  uint16_t loc_angle;
+  if(par_deg <= 360)
+  {
+    loc_angle = par_deg;
+  }
+  else
+  {
+    loc_angle = par_deg % 360;
+    loc_angle = ((par_deg != 0)?par_deg:360);
+  }
+  return loc_angle;
+}
+/*DrawArc. Draw angle is beginning from 4 quart of trigonometric circle (3pi/2)
+ * start_angle in degree
+ * sweep in degree
+ */
+void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color) {
+	#define CIRCLE_APPROXIMATION_SEGMENTS 36
+	float approx_degree;
+	uint32_t approx_segments;
+	uint8_t xp1,xp2;
+	uint8_t yp1,yp2;
+	uint32_t count = 0;
+	uint32_t loc_sweep = 0;
+	float rad;
+	
+	loc_sweep = ssd1306_NormalizeTo0_360(sweep);
+	
+	count = (ssd1306_NormalizeTo0_360(start_angle) * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
+	approx_segments = (loc_sweep * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
+	approx_degree = loc_sweep / (float)approx_segments;
+	while(count < approx_segments)
+	{
+		rad = ssd1306_DegToRad(count*approx_degree);
+		xp1 = x + (int8_t)(sin(rad)*radius);
+		yp1 = y + (int8_t)(cos(rad)*radius);	
+		count++;
+		if(count != approx_segments)
+		{
+			rad = ssd1306_DegToRad(count*approx_degree);
+		}
+		else
+		{			
+			rad = ssd1306_DegToRad(loc_sweep);
+		}
+		xp2 = x + (int8_t)(sin(rad)*radius);
+		yp2 = y + (int8_t)(cos(rad)*radius);	
+		ssd1306_Line(xp1,yp1,xp2,yp2,color);
+	}
+	
+	return;
+}
+//Draw circle
+void ssd1306_DrawCircle(uint8_t x, uint8_t y, uint8_t radius, SSD1306_COLOR color) {
+  ssd1306_DrawArc(x, y, radius, 0, 360, color);
+  return;
 }
