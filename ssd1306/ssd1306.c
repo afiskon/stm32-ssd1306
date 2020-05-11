@@ -270,9 +270,8 @@ void ssd1306_SetCursor(uint8_t x, uint8_t y) {
     SSD1306.CurrentX = x;
     SSD1306.CurrentY = y;
 }
-// Draw line
-/*There is used Besier's algorithm
- */
+
+// Draw line by Bresenhem's algorithm
 void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
   int32_t deltaX = abs(x2 - x1);
   int32_t deltaY = abs(y2 - y1);
@@ -380,8 +379,58 @@ void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle,
 	
 	return;
 }
-//Draw circle
-void ssd1306_DrawCircle(uint8_t x, uint8_t y, uint8_t radius, SSD1306_COLOR color) {
-  ssd1306_DrawArc(x, y, radius, 0, 360, color);
+//Draw circle by Bresenhem's algorithm
+void ssd1306_DrawCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR par_color) {
+  int32_t x = -par_r;
+  int32_t y = 0;
+  int32_t err = 2 - 2 * par_r;
+  int32_t e2;
+
+  if (par_x >= SSD1306_WIDTH || par_y >= SSD1306_HEIGHT) {
+    return;
+  }
+
+    do {
+      ssd1306_DrawPixel(par_x - x, par_y + y, par_color);
+      ssd1306_DrawPixel(par_x + x, par_y + y, par_color);
+      ssd1306_DrawPixel(par_x + x, par_y - y, par_color);
+      ssd1306_DrawPixel(par_x - x, par_y - y, par_color);
+        e2 = err;
+        if (e2 <= y) {
+            y++;
+            err = err + (y * 2 + 1);
+            if(-x == y && e2 <= x) {
+              e2 = 0;
+            }
+            else
+            {
+              /*nothing to do*/
+            }
+        }
+        else
+        {
+          /*nothing to do*/
+        }
+        if(e2 > x) {
+          x++;
+          err = err + (x * 2 + 1);
+        }
+        else
+        {
+          /*nothing to do*/
+        }
+    } while(x <= 0);
+
+    return;
+}
+
+//Draw rectangle
+void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
+  ssd1306_Line(x1,y1,x2,y1,color);
+  ssd1306_Line(x2,y1,x2,y2,color);
+  ssd1306_Line(x2,y2,x1,y2,color);
+  ssd1306_Line(x1,y2,x1,y1,color);
+
   return;
 }
+
