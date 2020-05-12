@@ -19,6 +19,7 @@ _BEGIN_STD_C
 #include "stm32f1xx_hal.h"
 #elif defined(STM32F4)
 #include "stm32f4xx_hal.h"
+#include "stm32f4xx_hal_gpio.h"
 #elif defined(STM32L0)
 #include "stm32l0xx_hal.h"
 #elif defined(STM32L4)
@@ -110,6 +111,10 @@ typedef struct {
     uint8_t Inverted;
     uint8_t Initialized;
 } SSD1306_t;
+typedef struct {
+    uint8_t x;
+    uint8_t y;
+} SSD1306_VERTEX;
 
 // Procedure definitions
 void ssd1306_Init(void);
@@ -119,6 +124,11 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
 char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
 char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color);
 void ssd1306_SetCursor(uint8_t x, uint8_t y);
+void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color);
+void ssd1306_DrawCircle(uint8_t par_x, uint8_t par_y, uint8_t par_r, SSD1306_COLOR color);
+void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD1306_COLOR color);
+void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 
 // Low-level procedures
 void ssd1306_Reset(void);
