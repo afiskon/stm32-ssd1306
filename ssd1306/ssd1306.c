@@ -53,10 +53,20 @@ void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
 
 
 // Screenbuffer
-static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
+static uint8_t SSD1306_Buffer[SSD1306_BUFFER_SIZE];
 
 // Screen object
 static SSD1306_t SSD1306;
+
+/* Fills the Screenbuffer with values from a given buffer of a fixed length */
+SSD1306_Error_t ssd1306_FillBuffer(uint8_t* buf, uint32_t len) {
+    SSD1306_Error_t ret = SSD1306_ERR;
+    if (len <= SSD1306_BUFFER_SIZE) {
+        memcpy(SSD1306_Buffer,buf,len);
+        ret = SSD1306_OK;
+    }
+    return ret;
+}
 
 // Initialize the oled screen
 void ssd1306_Init(void) {

@@ -13,6 +13,8 @@
 
 _BEGIN_STD_C
 
+#include "ssd1306_conf.h"
+
 #if defined(STM32F0)
 #include "stm32f0xx_hal.h"
 #elif defined(STM32F1)
@@ -31,7 +33,7 @@ _BEGIN_STD_C
 #elif defined(STM32F7)
 #include "stm32f7xx_hal.h"
 #else
- #error "SSD1306 library was tested only on STM32F1, STM32F3, STM32F4, STM32F7, STM32L0, STM32L4, STM32H7 MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
+#error "SSD1306 library was tested only on  STM32F0, STM32F1, STM32F3, STM32F4, STM32F7, STM32L0, STM32L4, STM32H7 MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
 #endif
 
 #include "ssd1306_fonts.h"
@@ -39,7 +41,7 @@ _BEGIN_STD_C
 /* vvv I2C config vvv */
 
 #ifndef SSD1306_I2C_PORT
-#define SSD1306_I2C_PORT		hi2c1
+#define SSD1306_I2C_PORT        hi2c1
 #endif
 
 #ifndef SSD1306_I2C_ADDR
@@ -98,11 +100,20 @@ extern SPI_HandleTypeDef SSD1306_SPI_PORT;
 // some LEDs don't display anything in first two columns
 // #define SSD1306_WIDTH           130
 
+#ifndef SSD1306_BUFFER_SIZE
+#define SSD1306_BUFFER_SIZE   SSD1306_WIDTH * SSD1306_HEIGHT / 8
+#endif
+
 // Enumeration for screen colors
 typedef enum {
     Black = 0x00, // Black color, no pixel
     White = 0x01  // Pixel is set. Color depends on OLED
 } SSD1306_COLOR;
+
+typedef enum {
+    SSD1306_OK = 0x00,
+    SSD1306_ERR = 0x01  // Generic error.
+} SSD1306_Error_t;
 
 // Struct to store transformations
 typedef struct {
@@ -134,6 +145,7 @@ void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD13
 void ssd1306_Reset(void);
 void ssd1306_WriteCommand(uint8_t byte);
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size);
+SSD1306_Error_t ssd1306_FillBuffer(uint8_t* buf, uint32_t len);
 
 _END_STD_C
 
