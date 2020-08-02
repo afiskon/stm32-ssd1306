@@ -1,6 +1,7 @@
 #include "ssd1306.h"
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>  // For memcpy
 
 #if defined(SSD1306_USE_I2C)
 
