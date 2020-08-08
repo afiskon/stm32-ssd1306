@@ -24,6 +24,13 @@
 #define SSD1306_I2C_PORT        hi2c1
 #define SSD1306_I2C_ADDR        (0x3C << 1)
 
+// Mirror the screen if needed
+// #define SSD1306_MIRROR_VERT
+// #define SSD1306_MIRROR_HORIZ
+
+// Set inverse color if needed
+// # define SSD1306_INVERSE_COLOR
+
 // Include only needed fonts
 #define SSD1306_INCLUDE_FONT_6x8
 #define SSD1306_INCLUDE_FONT_7x10

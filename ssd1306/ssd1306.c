@@ -6,30 +6,30 @@
 #if defined(SSD1306_USE_I2C)
 
 void ssd1306_Reset(void) {
-	/* for I2C - do nothing */
+    /* for I2C - do nothing */
 }
 
 // Send a byte to the command register
 void ssd1306_WriteCommand(uint8_t byte) {
-	HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+    HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
 }
 
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
-	HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+    HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
 }
 
 #elif defined(SSD1306_USE_SPI)
 
 void ssd1306_Reset(void) {
-	// CS = High (not selected)
-	HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET);
+    // CS = High (not selected)
+    HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET);
 
-	// Reset the OLED
-	HAL_GPIO_WritePin(SSD1306_Reset_Port, SSD1306_Reset_Pin, GPIO_PIN_RESET);
-	HAL_Delay(10);
-	HAL_GPIO_WritePin(SSD1306_Reset_Port, SSD1306_Reset_Pin, GPIO_PIN_SET);
-	HAL_Delay(10);
+    // Reset the OLED
+    HAL_GPIO_WritePin(SSD1306_Reset_Port, SSD1306_Reset_Pin, GPIO_PIN_RESET);
+    HAL_Delay(10);
+    HAL_GPIO_WritePin(SSD1306_Reset_Port, SSD1306_Reset_Pin, GPIO_PIN_SET);
+    HAL_Delay(10);
 }
 
 // Send a byte to the command register
@@ -71,16 +71,16 @@ SSD1306_Error_t ssd1306_FillBuffer(uint8_t* buf, uint32_t len) {
 
 // Initialize the oled screen
 void ssd1306_Init(void) {
-	// Reset OLED
-	ssd1306_Reset();
+    // Reset OLED
+    ssd1306_Reset();
 
     // Wait for the screen to boot
     HAL_Delay(100);
-    
-    // Init OLED
-    ssd1306_WriteCommand(0xAE); //display off
 
-    ssd1306_WriteCommand(0x20); //Set Memory Addressing Mode   
+    // Init OLED
+    ssd1306_SetDisplayOn(0); //display off
+
+    ssd1306_WriteCommand(0x20); //Set Memory Addressing Mode
     ssd1306_WriteCommand(0x00); // 00b,Horizontal Addressing Mode; 01b,Vertical Addressing Mode;
                                 // 10b,Page Addressing Mode (RESET); 11b,Invalid
 
@@ -97,8 +97,7 @@ void ssd1306_Init(void) {
 
     ssd1306_WriteCommand(0x40); //--set start line address - CHECK
 
-    ssd1306_WriteCommand(0x81); //--set contrast control register - CHECK
-    ssd1306_WriteCommand(0xFF);
+    ssd1306_SetContrast(0xFF);
 
 #ifdef SSD1306_MIRROR_HORIZ
     ssd1306_WriteCommand(0xA0); // Mirror horizontally
@@ -157,7 +156,7 @@ void ssd1306_Init(void) {
 
     ssd1306_WriteCommand(0x8D); //--set DC-DC enable
     ssd1306_WriteCommand(0x14); //
-    ssd1306_WriteCommand(0xAF); //--turn on SSD1306 panel
+    ssd1306_SetDisplayOn(1); //--turn on SSD1306 panel
 
     // Clear screen
     ssd1306_Fill(Black);
@@ -290,10 +289,10 @@ void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR 
   int32_t signY = ((y1 < y2) ? 1 : -1);
   int32_t error = deltaX - deltaY;
   int32_t error2;
-	
+    
   ssd1306_DrawPixel(x2, y2, color);
-	while((x1 != x2) || (y1 != y2))
-	{
+    while((x1 != x2) || (y1 != y2))
+    {
     ssd1306_DrawPixel(x1, y1, color);
     error2 = error * 2;
     if(error2 > -deltaY)
@@ -305,7 +304,7 @@ void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR 
     {
     /*nothing to do*/
     }
-		
+        
     if(error2 < deltaX)
     {
       error += deltaX;
@@ -334,7 +333,7 @@ void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD13
 }
 /*Convert Degrees to Radians*/
 static float ssd1306_DegToRad(float par_deg) {
-	return par_deg * 3.14 / 180.0;
+    return par_deg * 3.14 / 180.0;
 }
 /*Normalize degree to [0;360]*/
 static uint16_t ssd1306_NormalizeTo0_360(uint16_t par_deg) {
@@ -355,40 +354,40 @@ static uint16_t ssd1306_NormalizeTo0_360(uint16_t par_deg) {
  * sweep in degree
  */
 void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color) {
-	#define CIRCLE_APPROXIMATION_SEGMENTS 36
-	float approx_degree;
-	uint32_t approx_segments;
-	uint8_t xp1,xp2;
-	uint8_t yp1,yp2;
-	uint32_t count = 0;
-	uint32_t loc_sweep = 0;
-	float rad;
-	
-	loc_sweep = ssd1306_NormalizeTo0_360(sweep);
-	
-	count = (ssd1306_NormalizeTo0_360(start_angle) * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
-	approx_segments = (loc_sweep * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
-	approx_degree = loc_sweep / (float)approx_segments;
-	while(count < approx_segments)
-	{
-		rad = ssd1306_DegToRad(count*approx_degree);
-		xp1 = x + (int8_t)(sin(rad)*radius);
-		yp1 = y + (int8_t)(cos(rad)*radius);	
-		count++;
-		if(count != approx_segments)
-		{
-			rad = ssd1306_DegToRad(count*approx_degree);
-		}
-		else
-		{			
-			rad = ssd1306_DegToRad(loc_sweep);
-		}
-		xp2 = x + (int8_t)(sin(rad)*radius);
-		yp2 = y + (int8_t)(cos(rad)*radius);	
-		ssd1306_Line(xp1,yp1,xp2,yp2,color);
-	}
-	
-	return;
+    #define CIRCLE_APPROXIMATION_SEGMENTS 36
+    float approx_degree;
+    uint32_t approx_segments;
+    uint8_t xp1,xp2;
+    uint8_t yp1,yp2;
+    uint32_t count = 0;
+    uint32_t loc_sweep = 0;
+    float rad;
+    
+    loc_sweep = ssd1306_NormalizeTo0_360(sweep);
+    
+    count = (ssd1306_NormalizeTo0_360(start_angle) * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
+    approx_segments = (loc_sweep * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
+    approx_degree = loc_sweep / (float)approx_segments;
+    while(count < approx_segments)
+    {
+        rad = ssd1306_DegToRad(count*approx_degree);
+        xp1 = x + (int8_t)(sin(rad)*radius);
+        yp1 = y + (int8_t)(cos(rad)*radius);    
+        count++;
+        if(count != approx_segments)
+        {
+            rad = ssd1306_DegToRad(count*approx_degree);
+        }
+        else
+        {            
+            rad = ssd1306_DegToRad(loc_sweep);
+        }
+        xp2 = x + (int8_t)(sin(rad)*radius);
+        yp2 = y + (int8_t)(cos(rad)*radius);    
+        ssd1306_Line(xp1,yp1,xp2,yp2,color);
+    }
+    
+    return;
 }
 //Draw circle by Bresenhem's algorithm
 void ssd1306_DrawCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR par_color) {
@@ -445,3 +444,24 @@ void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD13
   return;
 }
 
+void ssd1306_SetContrast(const uint8_t value) {
+    const uint8_t kSetContrastControlRegister = 0x81;
+    ssd1306_WriteCommand(kSetContrastControlRegister);
+    ssd1306_WriteCommand(value);
+}
+
+void ssd1306_SetDisplayOn(const uint8_t on) {
+    uint8_t value;
+    if (on) {
+        value = 0xAF;   // Display on
+        SSD1306.DisplayOn = 1;
+    } else {
+        value = 0xAE;   // Display off
+        SSD1306.DisplayOn = 0;
+    }
+    ssd1306_WriteCommand(value);
+}
+
+int8_t ssd1306_GetDisplayOn() {
+    return SSD1306.DisplayOn;
+}
