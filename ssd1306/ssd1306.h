@@ -121,6 +121,7 @@ typedef struct {
     uint16_t CurrentY;
     uint8_t Inverted;
     uint8_t Initialized;
+    uint8_t DisplayOn;
 } SSD1306_t;
 typedef struct {
     uint8_t x;
@@ -140,6 +141,24 @@ void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle,
 void ssd1306_DrawCircle(uint8_t par_x, uint8_t par_y, uint8_t par_r, SSD1306_COLOR color);
 void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD1306_COLOR color);
 void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+/**
+ * @brief Sets the contrast of the display.
+ * @param[in] value contrast to set.
+ * @note Contrast increases as the value increases.
+ * @note RESET = 7Fh.
+ */
+void ssd1306_SetContrast(const uint8_t value);
+/**
+ * @brief Set Display ON/OFF.
+ * @param[in] on 0 for OFF, any for ON.
+ */
+void ssd1306_SetDisplayOn(const uint8_t on);
+/**
+ * @brief Reads DisplayOn state.
+ * @return  0: OFF.
+ *          1: ON.
+ */
+uint8_t ssd1306_GetDisplayOn();
 
 // Low-level procedures
 void ssd1306_Reset(void);
