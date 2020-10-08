@@ -38,13 +38,29 @@ void ssd1306_TestFonts() {
     ssd1306_Fill(Black);
     ssd1306_SetCursor(2, 0);
     ssd1306_WriteString("Font 16x26", Font_16x26, White);
-    ssd1306_SetCursor(2, 26);
-    ssd1306_WriteString("Font 11x18", Font_11x18, White);
-    ssd1306_SetCursor(2, 26+18);
-    ssd1306_WriteString("Font 7x10", Font_7x10, White);
-    ssd1306_SetCursor(2, 26+18+10);
-    ssd1306_WriteString("Font 6x8", Font_6x8, White);
-    ssd1306_UpdateScreen();
+
+    if(SSD1306_HEIGHT > 26+18+10+8) {
+        ssd1306_SetCursor(2, 26);
+        ssd1306_WriteString("Font 11x18", Font_11x18, White);
+        ssd1306_SetCursor(2, 26+18);
+        ssd1306_WriteString("Font 7x10", Font_7x10, White);
+        ssd1306_SetCursor(2, 26+18+10);
+        ssd1306_WriteString("Font 6x8", Font_6x8, White);
+        ssd1306_UpdateScreen();
+    }
+    else
+    {
+        ssd1306_UpdateScreen();
+        HAL_Delay(1000);
+        ssd1306_Fill(Black);
+        ssd1306_SetCursor(2, 0);
+        ssd1306_WriteString("Font 11x18", Font_11x18, White);
+        ssd1306_SetCursor(2, 18);
+        ssd1306_WriteString("Font 7x10", Font_7x10, White);
+        ssd1306_SetCursor(80, 19);
+        ssd1306_WriteString("Font 6x8", Font_6x8, White);
+        ssd1306_UpdateScreen();
+    }
 }
 
 void ssd1306_TestFPS() {
