@@ -71,11 +71,11 @@ void ssd1306_TestFPS() {
     int fps = 0;
     char message[] = "ABCDEFGHIJK";
    
-    ssd1306_SetCursor(2,0);
-    ssd1306_WriteString("Testing...", Font_11x18, Black);
+    ssd1306_SetCursor(2,1);
+    ssd1306_WriteString("Testing...", Font_7x10, Black);
    
     do {
-        ssd1306_SetCursor(2, 18);
+        ssd1306_SetCursor(2, 14);
         ssd1306_WriteString(message, Font_11x18, Black);
         ssd1306_UpdateScreen();
        
@@ -94,7 +94,7 @@ void ssd1306_TestFPS() {
     snprintf(buff, sizeof(buff), "~%d FPS", fps);
    
     ssd1306_Fill(White);
-    ssd1306_SetCursor(2, 18);
+    ssd1306_SetCursor(2, 14);
     ssd1306_WriteString(buff, Font_11x18, Black);
     ssd1306_UpdateScreen();
 }
