@@ -7,27 +7,29 @@ void ssd1306_TestBorder() {
     ssd1306_Fill(Black);
    
     uint32_t start = HAL_GetTick();
-    uint32_t end = start;
+    uint32_t now = start;
     uint8_t x = 0;
     uint8_t y = 0;
     do {
         ssd1306_DrawPixel(x, y, Black);
 
-        if((y == 0) && (x < 127))
-            x++;
-        else if((x == 127) && (y < 63))
-            y++;
-        else if((y == 63) && (x > 0)) 
-            x--;
-        else
-            y--;
+        for(int i = 0; i < 3; i++) {
+            if((y == 0) && (x < SSD1306_WIDTH-1))
+                x++;
+            else if((x == SSD1306_WIDTH-1) && (y < SSD1306_HEIGHT-1))
+                y++;
+            else if((y == SSD1306_HEIGHT-1) && (x > 0)) 
+                x--;
+            else
+                y--;
+        }
 
         ssd1306_DrawPixel(x, y, White);
         ssd1306_UpdateScreen();
     
         HAL_Delay(5);
-        end = HAL_GetTick();
-    } while((end - start) < 8000);
+        now = HAL_GetTick();
+    } while((now - start) < 8000);
    
     HAL_Delay(1000);
 }
