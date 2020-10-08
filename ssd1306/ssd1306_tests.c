@@ -108,10 +108,10 @@ void ssd1306_TestLine() {
 }
 
 void ssd1306_TestRectangle() {
-  uint32_t delta;
+  uint32_t inset;
 
-  for(delta = 0; delta < 5; delta ++) {
-    ssd1306_DrawRectangle(1 + (5*delta),1 + (5*delta) ,SSD1306_WIDTH-1 - (5*delta),SSD1306_HEIGHT-1 - (5*delta),White);
+  for(inset = 1; inset <= SSD1306_HEIGHT/2; inset += (SSD1306_HEIGHT/2)/5) {
+    ssd1306_DrawRectangle(inset, inset, SSD1306_WIDTH-inset, SSD1306_HEIGHT-inset,White);
   }
   ssd1306_UpdateScreen();
   return;
