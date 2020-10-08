@@ -121,15 +121,18 @@ void ssd1306_TestCircle() {
   uint32_t delta;
 
   for(delta = 0; delta < 5; delta ++) {
-    ssd1306_DrawCircle(20* delta+30, 30, 10, White);
+    ssd1306_DrawCircle(20* delta+30, SSD1306_HEIGHT/2, 10, White);
   }
   ssd1306_UpdateScreen();
   return;
 }
 
 void ssd1306_TestArc() {
-
-  ssd1306_DrawArc(30, 30, 30, 20, 270, White);
+    
+if(SSD1306_HEIGHT > 32) 
+    ssd1306_DrawArc(30, 30, 30, 20, 270, White);
+  else 
+    ssd1306_DrawArc(30, 30, 30, 110, 250, White);
   ssd1306_UpdateScreen();
   return;
 }
@@ -137,13 +140,13 @@ void ssd1306_TestArc() {
 void ssd1306_TestPolyline() {
   SSD1306_VERTEX loc_vertex[] =
   {
-      {35,40},
-      {40,20},
-      {45,28},
-      {50,10},
-      {45,16},
-      {50,10},
-      {53,16}
+      {35,30},
+      {40,10},
+      {45,18},
+      {50,0},
+      {45,6},
+      {50,0},
+      {53,6}
   };
 
   ssd1306_Polyline(loc_vertex,sizeof(loc_vertex)/sizeof(loc_vertex[0]),White);
