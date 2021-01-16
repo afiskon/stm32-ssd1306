@@ -97,9 +97,6 @@ extern SPI_HandleTypeDef SSD1306_SPI_PORT;
 #define SSD1306_WIDTH           128
 #endif
 
-// some LEDs don't display anything in first two columns
-// #define SSD1306_WIDTH           130
-
 #ifndef SSD1306_BUFFER_SIZE
 #define SSD1306_BUFFER_SIZE   SSD1306_WIDTH * SSD1306_HEIGHT / 8
 #endif
