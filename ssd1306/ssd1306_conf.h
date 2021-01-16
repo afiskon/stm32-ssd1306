@@ -51,8 +51,8 @@
 // The default value is 128.
 // #define SSD1306_WIDTH           130
 
-// The height can be redefined as well if necessary.
-// The default value is 64
+// The height can be changed as well if necessary.
+// It can be 32, 64 or 128. The default value is 64.
 // #define SSD1306_HEIGHT          64
 
 #endif /* __SSD1306_CONF_H__ */
