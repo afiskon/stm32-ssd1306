@@ -15,9 +15,9 @@ void ssd1306_TestBorder() {
 
         if((y == 0) && (x < 127))
             x++;
-        else if((x == 127) && (y < 63))
+        else if((x == 127) && (y < (SSD1306_HEIGHT-1)))
             y++;
-        else if((y == 63) && (x > 0)) 
+        else if((y == (SSD1306_HEIGHT-1)) && (x > 0)) 
             x--;
         else
             y--;
@@ -76,7 +76,7 @@ void ssd1306_TestFPS() {
     snprintf(buff, sizeof(buff), "~%d FPS", fps);
    
     ssd1306_Fill(White);
-    ssd1306_SetCursor(2, 18);
+    ssd1306_SetCursor(2, 2);
     ssd1306_WriteString(buff, Font_11x18, Black);
     ssd1306_UpdateScreen();
 }
@@ -103,14 +103,13 @@ void ssd1306_TestCircle() {
   uint32_t delta;
 
   for(delta = 0; delta < 5; delta ++) {
-    ssd1306_DrawCircle(20* delta+30, 30, 10, White);
+    ssd1306_DrawCircle(20* delta+30, 15, 10, White);
   }
   ssd1306_UpdateScreen();
   return;
 }
 
 void ssd1306_TestArc() {
-
   ssd1306_DrawArc(30, 30, 30, 20, 270, White);
   ssd1306_UpdateScreen();
   return;
