@@ -1,0 +1,9 @@
+*.bak
+*.net
+*.kicad_pcb-bak
+*-cache.lib
+*.pdf
+*.dcm
+*.dsn
+*.bin
+sym-lib-table

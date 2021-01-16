@@ -1,0 +1,58 @@
+
+#n/** Configure pins as #n #t#t #t* Analog #n #t#t #t* Input #n #t#t #t* Output#n #t#t #t* EVENT_OUT#n #t#t #t* EXTI
+#t#t PA2#t ------> USART2_TX
+#t#t PA3#t ------> USART2_RX
+*/
+static void MX_GPIO_Init(void)
+{
+#n
+#tGPIO_InitTypeDef GPIO_InitStruct;
+#n#t/* GPIO Ports Clock Enable */
+#t__HAL_RCC_GPIOC_CLK_ENABLE();
+#t__HAL_RCC_GPIOH_CLK_ENABLE();
+#t__HAL_RCC_GPIOA_CLK_ENABLE();
+#t__HAL_RCC_GPIOB_CLK_ENABLE();
+#n#t/*Configure GPIO pin Output Level */
+#tHAL_GPIO_WritePin(GPIOC, OLED_CS_Pin|OLED_DC_Pin, GPIO_PIN_RESET);
+#n#t/*Configure GPIO pin Output Level */
+#tHAL_GPIO_WritePin(GPIOA, SPI_Led_Pin|I2C_Led_Pin, GPIO_PIN_RESET);
+#n#t/*Configure GPIO pin Output Level */
+#tHAL_GPIO_WritePin(OLED_Res_GPIO_Port, OLED_Res_Pin, GPIO_PIN_RESET);
+#n#t/*Configure GPIO pin : B1_Pin */
+#tGPIO_InitStruct.Pin = B1_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tHAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+#n#t/*Configure GPIO pins : OLED_CS_Pin OLED_DC_Pin */
+#tGPIO_InitStruct.Pin = OLED_CS_Pin|OLED_DC_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+#tHAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+#n#t/*Configure GPIO pin : Bus_Btn_Pin */
+#tGPIO_InitStruct.Pin = Bus_Btn_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tHAL_GPIO_Init(Bus_Btn_GPIO_Port, &GPIO_InitStruct);
+#n#t/*Configure GPIO pins : SPI_Led_Pin I2C_Led_Pin */
+#tGPIO_InitStruct.Pin = SPI_Led_Pin|I2C_Led_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+#tHAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+#n#t/*Configure GPIO pins : USART_TX_Pin USART_RX_Pin */
+#tGPIO_InitStruct.Pin = USART_TX_Pin|USART_RX_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+#tGPIO_InitStruct.Alternate = GPIO_AF7_USART2;
+#tHAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+#n#t/*Configure GPIO pin : OLED_Res_Pin */
+#tGPIO_InitStruct.Pin = OLED_Res_Pin;
+#tGPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+#tGPIO_InitStruct.Pull = GPIO_NOPULL;
+#tGPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+#tHAL_GPIO_Init(OLED_Res_GPIO_Port, &GPIO_InitStruct);
+#n
+}
+#n

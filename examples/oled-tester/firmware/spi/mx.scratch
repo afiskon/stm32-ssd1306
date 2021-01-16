@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+<ProjectName>/home/eax/projects/sandbox/stm32/stm32-oled-tester/\main</ProjectName>
+<CMSIS>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/CMSIS</CMSIS>
+<HAL_Driver>/home/eax/STM32Cube/Repository//STM32Cube_FW_F4_V1.18.0/Drivers/CMSIS</HAL_Driver>
+
+<Toolchain>Makefile</Toolchain>
+<Version>0</Version>
+
+<filestoremove>
+	<file>
+	</file>
+</filestoremove>
+
+<inctoremove>
+	<Aincludes>
+	   <include></include>
+    </Aincludes>
+	<Cincludes>
+    </Cincludes>
+</inctoremove>
+
+<configs>
+  <config>
+    <name>main</name>				
+    <device>STM32F411RETx</device>		 
+    <heapSize>0x200</heapSize>
+    <stackSize>0x400</stackSize>
+    
+    	<board>NUCLEO-F411RE</board>
+			
+    <usedDebug>true</usedDebug>
+    	<debugprobe></debugprobe>
+    <optimization></optimization>
+    <icfloc>0</icfloc>
+    <Adefines>
+        <define></define>
+    </Adefines>   
+
+    <UsedFreeRTOS></UsedFreeRTOS>
+    <Aincludes>
+
+
+	    	<include></include>
+    </Aincludes>
+    <Cdefines>
+    </Cdefines>
+    <definestoremove>
+        <Adefines>
+            <define></define>
+        </Adefines>
+        <Cdefines>
+            <define>USE_FULL_LL_DRIVER</define>
+            <define>MBEDTLS_CONFIG_FILE=&quot;mbedtls_config.h&quot;</define>
+            <define>_TIMEVAL_DEFINED</define>
+            <define>_SYS_TIME_H_</define>
+        </Cdefines>         
+    </definestoremove>
+    
+	<Cincludes>
+	   <include>Inc</include>
+	   <include>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Inc</include>
+	   <include>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy</include>
+	   <include>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/CMSIS/Device/ST/STM32F4xx/Include</include>
+	   <include>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/CMSIS/Include</include>
+
+    </Cincludes>
+      </config>
+    </configs> 
+
+    <underRoot>false</underRoot>
+
+	   <group>
+	    <name>Drivers</name> 
+		   <group>
+		 		<name>STM32F4xx_HAL_Driver</name>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rcc_ex.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ex.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_flash_ramfunc.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma_ex.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_dma.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_pwr_ex.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.c</name>
+						</file>
+						<file>
+							<name>/home/eax/STM32Cube/Repository/STM32Cube_FW_F4_V1.18.0/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.c</name>
+						</file>
+		    </group>
+		    <group>
+		    	<name>CMSIS</name>
+							<file>
+								<name>Src/system_stm32f4xx.c</name>
+							</file>
+		    	</group>
+	  </group>   
+	  <group>
+	  <name>Application</name>
+	    <group>
+	      <name>User</name>  
+                                <file>
+                                 <name>Src/main.c</name>
+                                </file>
+
+                                <file>
+                                 <name>Src/stm32f4xx_it.c</name>
+                                </file>
+
+                                <file>
+                                 <name>Src/stm32f4xx_hal_msp.c</name>
+                                </file>
+
+
+
+               <group>
+        <name>Src</name>
+                    <group>
+                    <name>main.c</name>
+                                    <file>
+                                            <name>Src/main.c</name>
+                                    </file>
+                    </group>
+        </group>
+               <group>
+        <name>Src</name>
+                    <group>
+                    <name>stm32f4xx_hal_msp.c</name>
+                                    <file>
+                                            <name>Src/stm32f4xx_hal_msp.c</name>
+                                    </file>
+                    </group>
+        </group>
+               <group>
+        <name>Src</name>
+                    <group>
+                    <name>stm32f4xx_it.c</name>
+                                    <file>
+                                            <name>Src/stm32f4xx_it.c</name>
+                                    </file>
+                    </group>
+        </group>
+
+</group> 
+  </group>
+</Project>
