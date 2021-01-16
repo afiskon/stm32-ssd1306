@@ -57,9 +57,9 @@ Src/main.c \
 Src/stm32f4xx_it.c \
 Src/system_stm32f4xx.c \
 Src/stm32f4xx_hal_msp.c \
-ssd1306/ssd1306.c \
-ssd1306/ssd1306_fonts.c \
-ssd1306/ssd1306_tests.c \
+../../../../ssd1306/ssd1306.c \
+../../../../ssd1306/ssd1306_fonts.c \
+../../../../ssd1306/ssd1306_tests.c \
 $(FIRMWARE)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 $(FIRMWARE)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c \
 $(FIRMWARE)/Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c \
@@ -134,6 +134,7 @@ AS_INCLUDES =
 C_INCLUDES =  \
 -IInc \
 -Issd1306 \
+-I../../../../ssd1306 \
 -I$(FIRMWARE)/Drivers/STM32F4xx_HAL_Driver/Inc \
 -I$(FIRMWARE)/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -I$(FIRMWARE)/Drivers/CMSIS/Device/ST/STM32F4xx/Include \

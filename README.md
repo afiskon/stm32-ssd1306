@@ -3,7 +3,7 @@
 STM32 library for working with OLEDs based on SSD1306, SH1106, SH1107 and SSD1309,
 supports I2C and 4-wire SPI.
 
-Please see `ssd1306/ssd1306_conf.h` and `examples` directory for more details.
+Please see `ssd1306/ssd1306_conf_template.h` and `examples` directory for more details.
 
 See also:
 
