@@ -7,7 +7,7 @@ Tested on STM32F0, STM32F1, STM32F3, STM32F4, STM32L0, STM32L4, STM32F7 and STM3
 Also this code is known to work with
 [afiskon/fpga-ssd1306-to-vga](https://github.com/afiskon/fpga-ssd1306-to-vga).
 
-Please see `examples` directory and `ssd1306/ssd1306.h` for more details.
+Please see `examples` directory and `ssd1306/ssd1306_conf.h` for more details.
 
 The code is based on
 [4ilo/ssd1306-stm32HAL](https://github.com/4ilo/ssd1306-stm32HAL) library
