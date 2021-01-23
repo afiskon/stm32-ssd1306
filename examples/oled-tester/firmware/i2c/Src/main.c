@@ -39,7 +39,7 @@ void loop() {
 	// Blue button pressed - repeast the test
     if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) {
 		// Indicate that test is running
-		HAL_GPIO_WritePin(SPI_Led_GPIO_Port, I2C_Led_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(I2C_Led_GPIO_Port, I2C_Led_Pin, GPIO_PIN_SET);
 
 		ssd1306_TestAll();
 
@@ -48,7 +48,7 @@ void loop() {
     }
 
 	// Blink an LED
-	HAL_GPIO_TogglePin(SPI_Led_GPIO_Port, I2C_Led_Pin);
+	HAL_GPIO_TogglePin(I2C_Led_GPIO_Port, I2C_Led_Pin);
 	HAL_Delay(150);
 }
 
