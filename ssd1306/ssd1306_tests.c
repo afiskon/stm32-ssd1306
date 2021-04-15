@@ -33,15 +33,32 @@ void ssd1306_TestBorder() {
 }
 
 void ssd1306_TestFonts() {
-    ssd1306_Fill(Black);
-    ssd1306_SetCursor(2, 0);
+    uint8_t y = 0;
+	ssd1306_Fill(Black);
+
+	#ifdef SSD1306_INCLUDE_FONT_16x26
+    ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 16x26", Font_16x26, White);
-    ssd1306_SetCursor(2, 26);
+    y += 26;
+	#endif
+
+	#ifdef SSD1306_INCLUDE_FONT_11x18
+    ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 11x18", Font_11x18, White);
-    ssd1306_SetCursor(2, 26+18);
+    y += 18;
+	#endif
+
+	#ifdef SSD1306_INCLUDE_FONT_7x10
+    ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 7x10", Font_7x10, White);
-    ssd1306_SetCursor(2, 26+18+10);
+    y += 10;
+	#endif
+
+	#ifdef SSD1306_INCLUDE_FONT_6x8
+    ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 6x8", Font_6x8, White);
+	#endif
+
     ssd1306_UpdateScreen();
 }
 
