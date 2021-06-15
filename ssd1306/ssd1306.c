@@ -17,7 +17,7 @@ void ssd1306_WriteCommand(uint8_t byte) {
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
 #if defined(SSD1306_USE_DMA)
-		HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+    HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
 #else
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
 #endif
@@ -49,7 +49,7 @@ void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
     HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_SET); // data
 #if defined(SSD1306_USE_DMA)
-		HAL_SPI_Transmit_DMA(&SSD1306_SPI_PORT, buffer, buff_size);
+    HAL_SPI_Transmit_DMA(&SSD1306_SPI_PORT, buffer, buff_size);
 #else
     HAL_SPI_Transmit(&SSD1306_SPI_PORT, buffer, buff_size, HAL_MAX_DELAY);
 #endif
@@ -198,9 +198,9 @@ void ssd1306_UpdateScreen(void) {
     //  * 64px   ==  8 pages
     //  * 128px  ==  16 pages
 #if defined(SSD1306_USE_SPI)
-		ssd1306_WriteCommand(0xB0); // Set the current RAM page address.
-		ssd1306_WriteCommand(0x00);
-		ssd1306_WriteCommand(0x10);
+    ssd1306_WriteCommand(0xB0); // Set the current RAM page address.
+    ssd1306_WriteCommand(0x00);
+    ssd1306_WriteCommand(0x10);
 #endif
     ssd1306_WriteData(SSD1306_Buffer, SSD1306_BUFFER_SIZE);
 }
