@@ -17,6 +17,10 @@
 //#define STM32H7
 //#define STM32F7
 
+// If use DMA, you must enable I2C event interrupt or SPI global interrupt.
+// Otherwise the hard fault interrupt will be triggered
+//#define SSD1306_USE_DMA
+
 // Choose a bus
 #define SSD1306_USE_I2C
 //#define SSD1306_USE_SPI
