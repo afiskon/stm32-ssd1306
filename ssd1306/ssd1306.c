@@ -40,6 +40,11 @@ void ssd1306_Reset(void) {
 void ssd1306_WriteCommand(uint8_t byte) {
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
     HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_RESET); // command
+    while(SSD1306_SPI_PORT.State != HAL_SPI_STATE_READY); 	// Wait until previous transmit is done.
+                                                            // Before transmit a new sequence,
+                                                            // neither HAL_SPI_Transmit_DMA() nor HAL_SPI_Transmit() 
+                                                            // confirms the previous transmit is done in
+                                                            // STM32F1xx HAL driver V1.1.7, Oct. 20, 2020
     HAL_SPI_Transmit(&SSD1306_SPI_PORT, (uint8_t *) &byte, 1, HAL_MAX_DELAY);
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET); // un-select OLED
 }
@@ -48,6 +53,7 @@ void ssd1306_WriteCommand(uint8_t byte) {
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
     HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_SET); // data
+    while(SSD1306_SPI_PORT.State != HAL_SPI_STATE_READY); 	// Wait until previous transmit is done.
 #if defined(SSD1306_USE_DMA)
     HAL_SPI_Transmit_DMA(&SSD1306_SPI_PORT, buffer, buff_size);
 #else
