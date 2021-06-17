@@ -17,8 +17,15 @@
 //#define STM32H7
 //#define STM32F7
 
-// If use DMA, you must enable I2C event interrupt or SPI global interrupt.
-// Otherwise the hard fault interrupt will be triggered
+/*
+* Warning: If use DMA, you must enable I2C event interrupt or SPI global
+* interrupt, otherwise the hard fault interrupt will be triggered.
+*
+* If you use DMA and ssd1306_UpdateScreen() will be called in an interrupt
+* service routine (ISR), you must ensure the ISR can be interrupted by DMA
+* ISR for I2C or SPI, which unlocks I2C or SPI hardware, otherwise I2C or
+* SPI hardware will be busy forever.
+*/
 //#define SSD1306_USE_DMA
 
 // Choose a bus
