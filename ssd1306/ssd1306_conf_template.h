@@ -17,6 +17,10 @@
 //#define STM32H7
 //#define STM32F7
 
+// See details about how to do in STM32CubeMX and benchmark
+// in ../DMA_how_to_and_benchmark.md
+//#define SSD1306_USE_DMA
+
 // Choose a bus
 #define SSD1306_USE_I2C
 //#define SSD1306_USE_SPI

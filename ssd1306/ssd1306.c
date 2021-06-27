@@ -11,12 +11,18 @@ void ssd1306_Reset(void) {
 
 // Send a byte to the command register
 void ssd1306_WriteCommand(uint8_t byte) {
+    while(SSD1306_I2C_PORT.State != HAL_I2C_STATE_READY); 	// wait until previous transmit is done
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
 }
 
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
+    while(SSD1306_I2C_PORT.State != HAL_I2C_STATE_READY); 	// wait until previous transmit is done
+#if defined(SSD1306_USE_DMA)
+    HAL_I2C_Mem_Write_DMA(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size);
+#else
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+#endif
 }
 
 #elif defined(SSD1306_USE_SPI)
@@ -34,6 +40,7 @@ void ssd1306_Reset(void) {
 
 // Send a byte to the command register
 void ssd1306_WriteCommand(uint8_t byte) {
+    while(SSD1306_SPI_PORT.State != HAL_SPI_STATE_READY); 	// wait until previous transmit is done
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
     HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_RESET); // command
     HAL_SPI_Transmit(&SSD1306_SPI_PORT, (uint8_t *) &byte, 1, HAL_MAX_DELAY);
@@ -42,9 +49,14 @@ void ssd1306_WriteCommand(uint8_t byte) {
 
 // Send data
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
+    while(SSD1306_SPI_PORT.State != HAL_SPI_STATE_READY); 	// wait until previous transmit is done
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
     HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_SET); // data
+#if defined(SSD1306_USE_DMA)
+    HAL_SPI_Transmit_DMA(&SSD1306_SPI_PORT, buffer, buff_size);
+#else
     HAL_SPI_Transmit(&SSD1306_SPI_PORT, buffer, buff_size, HAL_MAX_DELAY);
+#endif
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET); // un-select OLED
 }
 
