@@ -7,6 +7,7 @@ Otherwise hard fault interrupt will occur.
 ### 1.1 I2C
 
 <img src="./pictures/enable I2C event interrupt.png" />
+
 ### 1.2 SPI
 
 <img src="./pictures/enable SPI global interrupt.png" />
