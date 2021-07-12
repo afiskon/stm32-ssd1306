@@ -21,18 +21,22 @@
 #define SSD1306_USE_I2C
 //#define SSD1306_USE_SPI
 
+#if defined(SSD1306_USE_I2C)
 // I2C Configuration
 #define SSD1306_I2C_PORT        hi2c1
 #define SSD1306_I2C_ADDR        (0x3C << 1)
-
+#elif defined(SSD1306_USE_SPI)
 // SPI Configuration
-//#define SSD1306_SPI_PORT        hspi1
-//#define SSD1306_CS_Port         OLED_CS_GPIO_Port
-//#define SSD1306_CS_Pin          OLED_CS_Pin
-//#define SSD1306_DC_Port         OLED_DC_GPIO_Port
-//#define SSD1306_DC_Pin          OLED_DC_Pin
-//#define SSD1306_Reset_Port      OLED_Res_GPIO_Port
-//#define SSD1306_Reset_Pin       OLED_Res_Pin
+#define SSD1306_SPI_PORT        hspi1
+#define SSD1306_CS_Port         OLED_CS_GPIO_Port
+#define SSD1306_CS_Pin          OLED_CS_Pin
+#define SSD1306_DC_Port         OLED_DC_GPIO_Port
+#define SSD1306_DC_Pin          OLED_DC_Pin
+#define SSD1306_Reset_Port      OLED_Res_GPIO_Port
+#define SSD1306_Reset_Pin       OLED_Res_Pin
+#else
+#error "You should define SSD1306_USE_SPI or SSD1306_USE_I2C macro!"
+#endif
 
 // Mirror the screen if needed
 // #define SSD1306_MIRROR_VERT
