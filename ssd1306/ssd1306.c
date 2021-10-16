@@ -206,12 +206,7 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color) {
         // Don't write outside the buffer
         return;
     }
-    
-    // Check if pixel should be inverted
-    if(SSD1306.Inverted) {
-        color = (SSD1306_COLOR)!color;
-    }
-    
+   
     // Draw in the right color
     if(color == White) {
         SSD1306_Buffer[x + (y / 8) * SSD1306_WIDTH] |= 1 << (y % 8);
