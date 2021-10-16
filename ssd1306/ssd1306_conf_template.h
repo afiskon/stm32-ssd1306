@@ -11,10 +11,12 @@
 //#define STM32F1
 //#define STM32F4
 //#define STM32L0
+//#define STM32L1
 //#define STM32L4
 //#define STM32F3
 //#define STM32H7
 //#define STM32F7
+//#define STM32G0
 
 // Choose a bus
 #define SSD1306_USE_I2C
