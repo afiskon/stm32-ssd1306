@@ -439,6 +439,36 @@ void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD13
   return;
 }
 
+//Draw bitmap
+void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8_t w, uint8_t h, SSD1306_COLOR color)
+{
+    uint8_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
+    uint8_t byte = 0;
+
+    if (x >= SSD1306_WIDTH || y >= SSD1306_HEIGHT) {
+        return;
+    }
+
+    for(uint8_t j=0; j<h; j++, y++)
+    {
+        for(uint8_t i=0; i<w; i++)
+        {
+            if(i & 7)
+            {
+               byte <<= 1;
+            }
+            else
+            {
+               byte = (*(const unsigned char *)(&bitmap[j * byteWidth + i / 8]));
+            }
+            // Only write the "solid" bits, allows for overlapping bitmaps if desired
+            // If desired you could add a no-transparency flag and "else" the inverse
+            if(byte & 0x80) ssd1306_DrawPixel(x+i, y, (SSD1306_COLOR) color);
+        }
+    }
+  return;
+}
+
 void ssd1306_SetContrast(const uint8_t value) {
     const uint8_t kSetContrastControlRegister = 0x81;
     ssd1306_WriteCommand(kSetContrastControlRegister);
