@@ -140,30 +140,30 @@ void ssd1306_TestBorder() {
 
 void ssd1306_TestFonts() {
     uint8_t y = 0;
-	ssd1306_Fill(Black);
+    ssd1306_Fill(Black);
 
-	#ifdef SSD1306_INCLUDE_FONT_16x26
+    #ifdef SSD1306_INCLUDE_FONT_16x26
     ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 16x26", Font_16x26, White);
     y += 26;
-	#endif
+    #endif
 
-	#ifdef SSD1306_INCLUDE_FONT_11x18
+    #ifdef SSD1306_INCLUDE_FONT_11x18
     ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 11x18", Font_11x18, White);
     y += 18;
-	#endif
+    #endif
 
-	#ifdef SSD1306_INCLUDE_FONT_7x10
+    #ifdef SSD1306_INCLUDE_FONT_7x10
     ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 7x10", Font_7x10, White);
     y += 10;
-	#endif
+    #endif
 
-	#ifdef SSD1306_INCLUDE_FONT_6x8
+    #ifdef SSD1306_INCLUDE_FONT_6x8
     ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 6x8", Font_6x8, White);
-	#endif
+    #endif
 
     ssd1306_UpdateScreen();
 }
@@ -178,6 +178,8 @@ void ssd1306_TestFPS() {
    
     ssd1306_SetCursor(2,0);
     ssd1306_WriteString("Testing...", Font_11x18, Black);
+    ssd1306_SetCursor(2, 18*2);
+    ssd1306_WriteString("0123456789A", Font_11x18, Black);
    
     do {
         ssd1306_SetCursor(2, 18);
