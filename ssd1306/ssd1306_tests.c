@@ -192,7 +192,7 @@ void ssd1306_TestFPS() {
         end = HAL_GetTick();
     } while((end - start) < 5000);
    
-    HAL_Delay(1000);
+    HAL_Delay(5000);
 
     char buff[64];
     fps = (float)fps / ((end - start) / 1000.0);
