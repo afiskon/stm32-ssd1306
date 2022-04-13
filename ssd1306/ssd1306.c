@@ -191,8 +191,8 @@ void ssd1306_UpdateScreen(void) {
     //  * 128px  ==  16 pages
     for(uint8_t i = 0; i < SSD1306_HEIGHT/8; i++) {
         ssd1306_WriteCommand(0xB0 + i); // Set the current RAM page address.
-        ssd1306_WriteCommand(0x00);
-        ssd1306_WriteCommand(0x10);
+        ssd1306_WriteCommand(0x00 + SSD1306_X_OFFSET_LOWER);
+        ssd1306_WriteCommand(0x10 + SSD1306_X_OFFSET_UPPER);
         ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*i],SSD1306_WIDTH);
     }
 }

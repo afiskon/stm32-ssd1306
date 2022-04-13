@@ -42,6 +42,14 @@ _BEGIN_STD_C
 #error "SSD1306 library was tested only on STM32F0, STM32F1, STM32F3, STM32F4, STM32F7, STM32L0, STM32L1, STM32L4, STM32H7, STM32G0, STM32G4 MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
 #endif
 
+#ifdef SSD1306_X_OFFSET
+#define SSD1306_X_OFFSET_LOWER (SSD1306_X_OFFSET & 0x0F)
+#define SSD1306_X_OFFSET_UPPER ((SSD1306_X_OFFSET >> 4) & 0x07)
+#else
+#define SSD1306_X_OFFSET_LOWER 0
+#define SSD1306_X_OFFSET_UPPER 0
+#endif
+
 #include "ssd1306_fonts.h"
 
 /* vvv I2C config vvv */
