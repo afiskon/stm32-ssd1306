@@ -78,7 +78,7 @@ void ssd1306_Init(void) {
     HAL_Delay(100);
 
     // Init OLED
-    ssd1306_SetDisplayOn(0); //display off
+    ssd1306_SetDisplay(SSD1306_OFF); //display off
 
     ssd1306_WriteCommand(0x20); //Set Memory Addressing Mode
     ssd1306_WriteCommand(0x00); // 00b,Horizontal Addressing Mode; 01b,Vertical Addressing Mode;
@@ -156,7 +156,7 @@ void ssd1306_Init(void) {
 
     ssd1306_WriteCommand(0x8D); //--set DC-DC enable
     ssd1306_WriteCommand(0x14); //
-    ssd1306_SetDisplayOn(1); //--turn on SSD1306 panel
+    ssd1306_SetDisplay(SSD1306_ON); //--turn on SSD1306 panel
 
     // Clear screen
     ssd1306_Fill(Black);
@@ -208,6 +208,17 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color) {
     }
    
     // Draw in the right color
+    if(color == Invert) {
+    	if((SSD1306_Buffer[x + (y / 8) * SSD1306_WIDTH] & (1 << (y % 8))) > 0)
+    	{
+    		color = Black;
+    	}
+    	else
+    	{
+    		color = White;
+    	}
+    }
+
     if(color == White) {
         SSD1306_Buffer[x + (y / 8) * SSD1306_WIDTH] |= 1 << (y % 8);
     } else { 
@@ -277,7 +288,7 @@ void ssd1306_SetCursor(uint8_t x, uint8_t y) {
 }
 
 // Draw line by Bresenhem's algorithm
-void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
+void ssd1306_DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
   int32_t deltaX = abs(x2 - x1);
   int32_t deltaY = abs(y2 - y1);
   int32_t signX = ((x1 < x2) ? 1 : -1);
@@ -317,7 +328,7 @@ void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD13
   uint16_t i;
   if(par_vertex != 0){
     for(i = 1; i < par_size; i++){
-      ssd1306_Line(par_vertex[i - 1].x, par_vertex[i - 1].y, par_vertex[i].x, par_vertex[i].y, color);
+    	ssd1306_DrawLine(par_vertex[i - 1].x, par_vertex[i - 1].y, par_vertex[i].x, par_vertex[i].y, color);
     }
   }
   else
@@ -379,7 +390,7 @@ void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle,
         }
         xp2 = x + (int8_t)(sin(rad)*radius);
         yp2 = y + (int8_t)(cos(rad)*radius);    
-        ssd1306_Line(xp1,yp1,xp2,yp2,color);
+        ssd1306_DrawLine(xp1,yp1,xp2,yp2,color);
     }
     
     return;
@@ -431,10 +442,19 @@ void ssd1306_DrawCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR 
 
 //Draw rectangle
 void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
-  ssd1306_Line(x1,y1,x2,y1,color);
-  ssd1306_Line(x2,y1,x2,y2,color);
-  ssd1306_Line(x2,y2,x1,y2,color);
-  ssd1306_Line(x1,y2,x1,y1,color);
+	ssd1306_DrawLine(x1,y1,x2,y1,color);
+	ssd1306_DrawLine(x2,y1,x2,y2,color);
+	ssd1306_DrawLine(x2,y2,x1,y2,color);
+	ssd1306_DrawLine(x1,y2,x1,y1,color);
+
+  return;
+}
+
+//Draw triangle
+void ssd1306_DrawTriangle(uint8_t x1, uint8_t y1, uint8_t width, uint8_t height, SSD1306_COLOR color) {
+	ssd1306_DrawLine(x1,y1,x1+width,y1,color);
+	ssd1306_DrawLine(x1+width/2,y1-height,x1,y1,color);
+	ssd1306_DrawLine(x1+width/2,y1-height,x1+width,y1,color);
 
   return;
 }
@@ -469,16 +489,14 @@ void ssd1306_SetContrast(const uint8_t value) {
     ssd1306_WriteCommand(value);
 }
 
-void ssd1306_SetDisplayOn(const uint8_t on) {
-    uint8_t value;
-    if (on) {
-        value = 0xAF;   // Display on
+void ssd1306_SetDisplay(SSD1306_Power_t Power)
+{
+    if (Power == SSD1306_ON) {
         SSD1306.DisplayOn = 1;
     } else {
-        value = 0xAE;   // Display off
         SSD1306.DisplayOn = 0;
     }
-    ssd1306_WriteCommand(value);
+    ssd1306_WriteCommand(Power);
 }
 
 uint8_t ssd1306_GetDisplayOn() {
