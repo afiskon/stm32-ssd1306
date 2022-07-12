@@ -208,8 +208,8 @@ void ssd1306_TestFPS() {
 
 void ssd1306_TestLine() {
 
-  ssd1306_Line(1,1,SSD1306_WIDTH - 1,SSD1306_HEIGHT - 1,White);
-  ssd1306_Line(SSD1306_WIDTH - 1,1,1,SSD1306_HEIGHT - 1,White);
+  ssd1306_DrawLine(1,1,SSD1306_WIDTH - 1,SSD1306_HEIGHT - 1,White);
+  ssd1306_DrawLine(SSD1306_WIDTH - 1,1,1,SSD1306_HEIGHT - 1,White);
   ssd1306_UpdateScreen();
   return;
 }
