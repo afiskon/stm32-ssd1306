@@ -118,13 +118,19 @@ extern SPI_HandleTypeDef SSD1306_SPI_PORT;
 // Enumeration for screen colors
 typedef enum {
     Black = 0x00, // Black color, no pixel
-    White = 0x01  // Pixel is set. Color depends on OLED
+    White = 0x01,  // Pixel is set. Color depends on OLED
+	Invert = 0x02, // Pixel in the frame buffer will be inverted
 } SSD1306_COLOR;
 
 typedef enum {
     SSD1306_OK = 0x00,
     SSD1306_ERR = 0x01  // Generic error.
 } SSD1306_Error_t;
+
+typedef enum {
+    SSD1306_OFF = 0xAE, // command to switch display off
+    SSD1306_ON = 0xAF // command to switch display on
+} SSD1306_Power_t;
 
 // Struct to store transformations
 typedef struct {
@@ -147,11 +153,12 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
 char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
 char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color);
 void ssd1306_SetCursor(uint8_t x, uint8_t y);
-void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+void ssd1306_DrawLine(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color);
 void ssd1306_DrawCircle(uint8_t par_x, uint8_t par_y, uint8_t par_r, SSD1306_COLOR color);
 void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD1306_COLOR color);
 void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+void ssd1306_DrawTriangle(uint8_t x1, uint8_t y1, uint8_t width, uint8_t height, SSD1306_COLOR color);
 void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8_t w, uint8_t h, SSD1306_COLOR color);
 /**
  * @brief Sets the contrast of the display.
@@ -164,7 +171,7 @@ void ssd1306_SetContrast(const uint8_t value);
  * @brief Set Display ON/OFF.
  * @param[in] on 0 for OFF, any for ON.
  */
-void ssd1306_SetDisplayOn(const uint8_t on);
+void ssd1306_SetDisplay(SSD1306_Power_t Power);
 /**
  * @brief Reads DisplayOn state.
  * @return  0: OFF.
