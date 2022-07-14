@@ -118,7 +118,8 @@ extern SPI_HandleTypeDef SSD1306_SPI_PORT;
 // Enumeration for screen colors
 typedef enum {
     Black = 0x00, // Black color, no pixel
-    White = 0x01  // Pixel is set. Color depends on OLED
+    White = 0x01,  // Pixel is set. Color depends on OLED
+	Invert = 0x02, // Color of the affected pixel will be inverted
 } SSD1306_COLOR;
 
 typedef enum {
