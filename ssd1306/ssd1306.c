@@ -207,6 +207,18 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color) {
         return;
     }
    
+    // if inversion is choosen, check the current pixel color and invert it
+    if(color == Invert) {
+    	if((SSD1306_Buffer[x + (y / 8) * SSD1306_WIDTH] & (1 << (y % 8))) > 0)
+    	{
+    		color = Black;
+    	}
+    	else
+    	{
+    		color = White;
+    	}
+    }
+
     // Draw in the right color
     if(color == White) {
         SSD1306_Buffer[x + (y / 8) * SSD1306_WIDTH] |= 1 << (y % 8);
@@ -240,7 +252,7 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color) {
         for(j = 0; j < Font.FontWidth; j++) {
             if((b << j) & 0x8000)  {
                 ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR) color);
-            } else {
+            } else if(color != Invert){
                 ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR)!color);
             }
         }
