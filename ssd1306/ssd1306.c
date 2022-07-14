@@ -451,6 +451,16 @@ void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD13
   return;
 }
 
+//Draw triangle
+void ssd1306_DrawTriangle(uint8_t x1, uint8_t y1, uint8_t width, uint8_t height, SSD1306_COLOR color) {
+	ssd1306_DrawLine(x1,y1,x1+width,y1,color);
+	ssd1306_DrawLine(x1+width/2,y1-height,x1-1,y1-1,color);
+	ssd1306_DrawLine(x1+width/2+1,y1-height+1,x1+width-1,y1-1,color);
+
+  return;
+}
+
+
 //Draw bitmap - ported from the ADAFruit GFX library
 
 void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8_t w, uint8_t h, SSD1306_COLOR color)
