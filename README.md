@@ -18,4 +18,8 @@ The code is based on
 [4ilo/ssd1306-stm32HAL](https://github.com/4ilo/ssd1306-stm32HAL) library
 developed by Olivier Van den Eede ( [@4ilo](https://github.com/4ilo) ) in 2016.
 
+## Ports
+
 There is a [DuyTrandeLion/nrf52-ssd1309](https://github.com/DuyTrandeLion/nrf52-ssd1309) port to nRF52 of this library made by [@DuyTrandeLion](https://github.com/DuyTrandeLion) in 2020.
+
+There is also a [kirsche-ctrl/xmc2go-ssd1306](https://github.com/kirsche-ctrl/xmc2go-ssd1306) port to XMC made by [@kirsche-ctrl](https://github.com/kirsche-ctrl) in 2022.
