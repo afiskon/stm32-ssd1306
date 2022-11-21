@@ -349,7 +349,7 @@ static uint16_t ssd1306_NormalizeTo0_360(uint16_t par_deg) {
  * sweep in degree
  */
 void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color) {
-    #define CIRCLE_APPROXIMATION_SEGMENTS 36
+    static const uint8_t CIRCLE_APPROXIMATION_SEGMENTS = 36
     float approx_degree;
     uint32_t approx_segments;
     uint8_t xp1,xp2;
@@ -384,6 +384,54 @@ void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle,
     
     return;
 }
+
+/*
+ * Draw arc with radius line
+ * Angle is beginning from 4 quart of trigonometric circle (3pi/2)
+ * start_angle: start angle in degree
+ * sweep: finish angle in degree
+ */
+void ssd1306_DrawArcWithRadiusLine(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color) {
+    static const uint8_t CIRCLE_APPROXIMATION_SEGMENTS = 36
+    float approx_degree;
+    uint32_t approx_segments;
+    uint8_t xp1,xp2;
+    uint8_t yp1,yp2;
+    uint32_t count = 0;
+    uint32_t loc_sweep = 0;
+    float rad;
+    
+    loc_sweep = ssd1306_NormalizeTo0_360(sweep);
+    
+    count = (ssd1306_NormalizeTo0_360(start_angle) * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
+    approx_segments = (loc_sweep * CIRCLE_APPROXIMATION_SEGMENTS) / 360;
+    approx_degree = loc_sweep / (float)approx_segments;
+
+    rad = ssd1306_DegToRad(count*approx_degree);
+    uint8_t first_point_x = x + (int8_t)(sin(rad)*radius);
+    uint8_t first_point_y = y + (int8_t)(cos(rad)*radius);   
+    while (count < approx_segments) {
+        rad = ssd1306_DegToRad(count*approx_degree);
+        xp1 = x + (int8_t)(sin(rad)*radius);
+        yp1 = y + (int8_t)(cos(rad)*radius);    
+        count++;
+        if (count != approx_segments) {
+            rad = ssd1306_DegToRad(count*approx_degree);
+        }
+        else {            
+            rad = ssd1306_DegToRad(loc_sweep);
+        }
+        xp2 = x + (int8_t)(sin(rad)*radius);
+        yp2 = y + (int8_t)(cos(rad)*radius);    
+        ssd1306_Line(xp1,yp1,xp2,yp2,color);
+    }
+    
+    // Radius line
+    ssd1306_Line(x,y,first_point_x,first_point_y,color);
+    ssd1306_Line(x,y,xp2,yp2,color);
+    return;
+}
+
 //Draw circle by Bresenhem's algorithm
 void ssd1306_DrawCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR par_color) {
   int32_t x = -par_r;
@@ -429,14 +477,72 @@ void ssd1306_DrawCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR 
     return;
 }
 
+// Draw filled circle. Pixel positions calculated using Bresenham's algorithm
+void ssd1306_FillCircle(uint8_t par_x,uint8_t par_y,uint8_t par_r,SSD1306_COLOR par_color) {
+    int32_t x = -par_r;
+    int32_t y = 0;
+    int32_t err = 2 - 2 * par_r;
+    int32_t e2;
+
+    if (par_x >= SSD1306_WIDTH || par_y >= SSD1306_HEIGHT) {
+        return;
+    }
+
+    do {
+        for (uint8_t _y = (par_y + y); _y >= (par_y - y); _y--)
+        {
+            for (uint8_t _x = (par_x - x); _x >= (par_x + x); _x--)
+            {
+                ssd1306_DrawPixel(_x, _y, par_color);
+            }
+        }
+
+        e2 = err;
+        if (e2 <= y) {
+            y++;
+            err = err + (y * 2 + 1);
+            if (-x == y && e2 <= x) {
+                e2 = 0;
+            }
+            else {
+                /*nothing to do*/
+            }
+        }
+        else
+        {
+            /*nothing to do*/
+        }
+
+        if(e2 > x) {
+            x++;
+            err = err + (x * 2 + 1);
+        }
+        else {
+            /*nothing to do*/
+        }
+    } while(x <= 0);
+
+    return;
+}
+
 //Draw rectangle
 void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
-  ssd1306_Line(x1,y1,x2,y1,color);
-  ssd1306_Line(x2,y1,x2,y2,color);
-  ssd1306_Line(x2,y2,x1,y2,color);
-  ssd1306_Line(x1,y2,x1,y1,color);
+    ssd1306_Line(x1,y1,x2,y1,color);
+    ssd1306_Line(x2,y1,x2,y2,color);
+    ssd1306_Line(x2,y2,x1,y2,color);
+    ssd1306_Line(x1,y2,x1,y1,color);
 
-  return;
+    return;
+}
+
+// Draw filled rectangle
+void ssd1306_FillRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
+    for (uint8_t y = y2; y >= y1; y--) {
+        for (uint8_t x = x2; x >= x1; x--) {
+            ssd1306_DrawPixel(x, y, color);
+        }
+    }
+    return;
 }
 
 //Draw bitmap - ported from the ADAFruit GFX library
