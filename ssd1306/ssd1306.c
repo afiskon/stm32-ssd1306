@@ -349,7 +349,7 @@ static uint16_t ssd1306_NormalizeTo0_360(uint16_t par_deg) {
  * sweep in degree
  */
 void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color) {
-    static const uint8_t CIRCLE_APPROXIMATION_SEGMENTS = 36
+    static const uint8_t CIRCLE_APPROXIMATION_SEGMENTS = 36;
     float approx_degree;
     uint32_t approx_segments;
     uint8_t xp1,xp2;
@@ -392,7 +392,7 @@ void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle,
  * sweep: finish angle in degree
  */
 void ssd1306_DrawArcWithRadiusLine(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color) {
-    static const uint8_t CIRCLE_APPROXIMATION_SEGMENTS = 36
+    static const uint8_t CIRCLE_APPROXIMATION_SEGMENTS = 36;
     float approx_degree;
     uint32_t approx_segments;
     uint8_t xp1,xp2;
