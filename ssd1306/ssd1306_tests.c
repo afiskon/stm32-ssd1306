@@ -225,8 +225,10 @@ void ssd1306_TestRectangle() {
 }
 
 void ssd1306_TestRectangleFill() {
-  ssd1306_FillRectangle(1, 1, 40, 40, White);
-  ssd1306_FillRectangle(3, 50, 75, 60, White);
+  ssd1306_FillRectangle(31, 1, 65, 35, White);
+  ssd1306_FillRectangle(10, 45, 70, 60, White);
+  ssd1306_FillRectangle(75, 10, 100, 45, White);
+  ssd1306_FillRectangle(55, 30, 80, 55, Black);
   ssd1306_UpdateScreen();
 }
 
