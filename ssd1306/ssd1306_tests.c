@@ -224,18 +224,32 @@ void ssd1306_TestRectangle() {
   return;
 }
 
+void ssd1306_TestRectangleFill() {
+  ssd1306_FillRectangle(31, 1, 65, 35, White);
+  ssd1306_FillRectangle(10, 45, 70, 60, White);
+  ssd1306_FillRectangle(75, 10, 100, 45, White);
+  ssd1306_FillRectangle(55, 30, 80, 55, Black);
+  ssd1306_UpdateScreen();
+}
+
 void ssd1306_TestCircle() {
   uint32_t delta;
 
   for(delta = 0; delta < 5; delta ++) {
-    ssd1306_DrawCircle(20* delta+30, 15, 10, White);
+    ssd1306_DrawCircle(20*delta+30, 15, 10, White);
   }
+
+  for(delta = 0; delta < 5; delta ++) {
+    ssd1306_FillCircle(23*delta+15, 40, 10, White);
+  }
+
   ssd1306_UpdateScreen();
   return;
 }
 
 void ssd1306_TestArc() {
   ssd1306_DrawArc(30, 30, 30, 20, 270, White);
+  ssd1306_DrawArcWithRadiusLine(80, 55, 10, 30, 270, White);
   ssd1306_UpdateScreen();
   return;
 }
@@ -282,6 +296,9 @@ void ssd1306_TestAll() {
     ssd1306_Fill(Black);
     ssd1306_TestRectangle();
     ssd1306_TestLine();
+    HAL_Delay(3000);
+    ssd1306_Fill(Black);
+    ssd1306_TestRectangleFill();
     HAL_Delay(3000);
     ssd1306_Fill(Black);
     ssd1306_TestPolyline();
