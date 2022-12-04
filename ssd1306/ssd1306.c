@@ -395,8 +395,10 @@ void ssd1306_DrawArcWithRadiusLine(uint8_t x, uint8_t y, uint8_t radius, uint16_
     static const uint8_t CIRCLE_APPROXIMATION_SEGMENTS = 36;
     float approx_degree;
     uint32_t approx_segments;
-    uint8_t xp1,xp2;
-    uint8_t yp1,yp2;
+    uint8_t xp1 = 0;
+    uint8_t xp2 = 0;
+    uint8_t yp1 = 0;
+    uint8_t yp2 = 0;
     uint32_t count = 0;
     uint32_t loc_sweep = 0;
     float rad;
