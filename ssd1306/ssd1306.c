@@ -539,12 +539,17 @@ void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD13
 
 // Draw filled rectangle
 void ssd1306_FillRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color) {
-    for (uint8_t y = y2; y >= y1; y--) {
-        for (uint8_t x = x2; x >= x1; x--) {
-            ssd1306_DrawPixel(x, y, color);
-        }
-    }
-    return;
+	uint8_t x_start = ((x1<=x2) ? x1 : x2);
+	uint8_t x_end   = ((x1<=x2) ? x2 : x1);
+	uint8_t y_start = ((y1<=y2) ? y1 : y2);
+	uint8_t y_end   = ((y1<=y2) ? y2 : y1);
+
+		for (uint8_t y= y_start; (y<= y_end)&&(y<SSD1306_HEIGHT); y++) {
+	        for (uint8_t x= x_start; (x<= x_end)&&(x<SSD1306_WIDTH); x++) {
+	            ssd1306_DrawPixel(x, y, color);
+	        }
+	    }
+	    return;
 }
 
 //Draw bitmap - ported from the ADAFruit GFX library
