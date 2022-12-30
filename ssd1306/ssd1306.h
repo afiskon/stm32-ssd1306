@@ -156,6 +156,7 @@ void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD13
 void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_FillRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8_t w, uint8_t h, SSD1306_COLOR color);
+
 /**
  * @brief Sets the contrast of the display.
  * @param[in] value contrast to set.
@@ -163,11 +164,13 @@ void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8
  * @note RESET = 7Fh.
  */
 void ssd1306_SetContrast(const uint8_t value);
+
 /**
  * @brief Set Display ON/OFF.
  * @param[in] on 0 for OFF, any for ON.
  */
 void ssd1306_SetDisplayOn(const uint8_t on);
+
 /**
  * @brief Reads DisplayOn state.
  * @return  0: OFF.
