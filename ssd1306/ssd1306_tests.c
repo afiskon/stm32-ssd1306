@@ -138,7 +138,7 @@ void ssd1306_TestBorder() {
     HAL_Delay(1000);
 }
 
-void ssd1306_TestFonts() {
+void ssd1306_TestFonts1() {
     uint8_t y = 0;
     ssd1306_Fill(Black);
 
@@ -167,6 +167,24 @@ void ssd1306_TestFonts() {
 
     ssd1306_UpdateScreen();
 }
+
+/*
+ * This test shows how an 128x64 px OLED can replace a 0802 LCD.
+ */
+void ssd1306_TestFonts2() {
+    #ifdef SSD1306_INCLUDE_FONT_16x26
+    ssd1306_Fill(Black);
+
+    ssd1306_SetCursor(0, 3);
+    ssd1306_WriteString("14.000.0", Font_16x26, White);
+
+    ssd1306_SetCursor(0, 3+26+6);
+    ssd1306_WriteString("VCC 13.8", Font_16x26, White);
+
+    ssd1306_UpdateScreen();
+    #endif
+}
+
 
 void ssd1306_TestFPS() {
     ssd1306_Fill(White);
@@ -291,7 +309,9 @@ void ssd1306_TestAll() {
     ssd1306_TestFPS();
     HAL_Delay(3000);
     ssd1306_TestBorder();
-    ssd1306_TestFonts();
+    ssd1306_TestFonts1();
+    HAL_Delay(3000);
+    ssd1306_TestFonts2();
     HAL_Delay(3000);
     ssd1306_Fill(Black);
     ssd1306_TestRectangle();
