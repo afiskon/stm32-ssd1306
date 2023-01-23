@@ -1,9 +1,9 @@
-# Making Custom Fonts
+# Creating Custom Fonts
 
-This directory contains an example of making custom fonts with Python.
+This directory contains an example of creating custom fonts with Python.
 
 Here we are creating Font_16x24. This is an upscaled HD44780 5x8 font.
-Its main purpose is to simulate 0802 LCDs.
+Its main purpose is to simulate 0802 character LCDs.
 
 The source font is stored in hd44780-small.txt which is upscaled using
 upscale.py:
@@ -12,8 +12,7 @@ upscale.py:
 ./upscale.py -f ./hd44780-small.txt -x 5 -y 8 -s 3 > hd44780-large.txt
 ```
 
-This script creates hd44780-large.txt. The C code is created from
-hd44780-large.txt using generate.py script:
+The C code is created from hd44780-large.txt using generate.py:
 
 ```
 ./convert.py -f ./hd44780-large.txt -x 16 -y 24
@@ -84,7 +83,8 @@ If we remove zeroes:
 
 ```
 
-... you can clearly see a 6x8 pixels exclamation mark. The rest of the symbols
-are encoded the same way.
+... a 6x8 pixels exclamation mark can clearly be seen. The rest of the symbols
+are encoded in the same way.
 
-Knowing this you can make any custom fonts and modify convert.py if necessary.
+Knowing this you can create any custom fonts and also modify convert.py
+if necessary.
