@@ -12,7 +12,7 @@ upscale.py:
 ./upscale.py -f ./hd44780-small.txt -x 5 -y 8 -s 3 > hd44780-large.txt
 ```
 
-The C code is created from hd44780-large.txt using generate.py:
+The C code is created from hd44780-large.txt using convert.py:
 
 ```
 ./convert.py -f ./hd44780-large.txt -x 16 -y 24
