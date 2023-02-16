@@ -6,7 +6,7 @@
 #ifndef __SSD1306_CONF_H__
 #define __SSD1306_CONF_H__
 
-// Choose a microcontroller family
+ // Choose a microcontroller family
 #define STM32F0
 //#define STM32F1
 //#define STM32F4
@@ -21,19 +21,47 @@
 // Choose a bus
 #define SSD1306_USE_I2C
 //#define SSD1306_USE_SPI
-
+#ifdef SSD1306_USE_I2C
 // I2C Configuration
 #define SSD1306_I2C_PORT        hi2c1
 #define SSD1306_I2C_ADDR        (0x3C << 1)
 
+#elif defined(SSD1306_USE_SPI)
 // SPI Configuration
 //#define SSD1306_SPI_PORT        hspi1
 //#define SSD1306_CS_Port         OLED_CS_GPIO_Port
 //#define SSD1306_CS_Pin          OLED_CS_Pin
 //#define SSD1306_DC_Port         OLED_DC_GPIO_Port
 //#define SSD1306_DC_Pin          OLED_DC_Pin
-//#define SSD1306_Reset_Port      OLED_Res_GPIO_Port
-//#define SSD1306_Reset_Pin       OLED_Res_Pin
+//#define SSD1306_Reset_Port      OLED_RST_GPIO_Port
+//#define SSD1306_Reset_Pin       OLED_RST_Pin
+
+
+// SOFT I2C Configuration
+#elif defined(SSD1306_USE_SOFT_I2C)
+// Soft I2C Configuration
+//#define SSD1306_I2C_SDA_Port        OLED_SDA_GPIO_Port
+//#define SSD1306_I2C_SDA_Pin         OLED_SDA_Pin
+//#define SSD1306_I2C_SCL_Port        OLED_SCK_GPIO_Port
+//#define SSD1306_I2C_SCL_Pin         OLED_SCK_Pin
+//#define SSD1306_I2C_ADDR        (0x3C << 1)
+
+
+
+#elif defined(SSD1306_USE_SOFT_SPI)
+// SOFTWARE SPI Configuration
+#define SSD1306_SCLK_Port       OLED_SCK_GPIO_Port
+#define SSD1306_SCLK_Pin        OLED_SCK_Pin
+#define SSD1306_MOSI_Port       OLED_SDA_GPIO_Port
+#define SSD1306_MOSI_Pin        OLED_SDA_Pin
+#define SSD1306_CS_Port         OLED_CS_GPIO_Port
+#define SSD1306_CS_Pin          OLED_CS_Pin
+#define SSD1306_DC_Port         OLED_DC_GPIO_Port
+#define SSD1306_DC_Pin          OLED_DC_Pin
+#define SSD1306_Reset_Port      OLED_RST_GPIO_Port
+#define SSD1306_Reset_Pin       OLED_RST_Pin
+#endif
+
 
 // Mirror the screen if needed
 // #define SSD1306_MIRROR_VERT
