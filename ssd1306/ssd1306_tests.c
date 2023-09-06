@@ -119,9 +119,9 @@ void ssd1306_TestBorder() {
     do {
         ssd1306_DrawPixel(x, y, Black);
 
-        if((y == 0) && (x < 127))
+        if((y == 0) && (x < (SSD1306_WIDTH-1)))
             x++;
-        else if((x == 127) && (y < (SSD1306_HEIGHT-1)))
+        else if((x == (SSD1306_WIDTH-1)) && (y < (SSD1306_HEIGHT-1)))
             y++;
         else if((y == (SSD1306_HEIGHT-1)) && (x > 0)) 
             x--;
