@@ -133,7 +133,7 @@ void ssd1306_TestBorder() {
     
         HAL_Delay(5);
         end = HAL_GetTick();
-    } while((end - start) < 8000);
+    } while((end - start) < 8000 || y > 0);
    
     HAL_Delay(1000);
 }
