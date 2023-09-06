@@ -6,7 +6,8 @@
 _BEGIN_STD_C
 
 void ssd1306_TestBorder(void);
-void ssd1306_TestFonts(void);
+void ssd1306_TestFonts1(void);
+void ssd1306_TestFonts2(void);
 void ssd1306_TestFPS(void);
 void ssd1306_TestAll(void);
 void ssd1306_TestLine(void);
