@@ -112,8 +112,6 @@ const unsigned char github_logo_64x64[] = {
 void ssd1306_TestBorder() {
     ssd1306_Fill(Black);
    
-    uint32_t start = HAL_GetTick();
-    uint32_t end = start;
     uint8_t x = 0;
     uint8_t y = 0;
     do {
@@ -132,8 +130,7 @@ void ssd1306_TestBorder() {
         ssd1306_UpdateScreen();
     
         HAL_Delay(5);
-        end = HAL_GetTick();
-    } while((end - start) < 8000 || y > 0);
+    } while(x > 0 || y > 0);
    
     HAL_Delay(1000);
 }
