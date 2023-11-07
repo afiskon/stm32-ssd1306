@@ -44,7 +44,7 @@ _BEGIN_STD_C
 #elif defined(STM32G4)
 #include "stm32g4xx_hal.h"
 #else
-#error "SSD1306 library was tested only on STM32F0, STM32F1, STM32F3, STM32F4, STM32F7, STM32L0, STM32L1, STM32L4, STM32H7, STM32G0, STM32G4 MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
+#error "SSD1306 library was tested only on STM32F0, STM32F1, STM32F3, STM32F4, STM32F7, STM32L0, STM32L1, STM32L4, STM32H7, STM32G0, STM32G4, STM32WB MCU families. Please modify ssd1306.h if you know what you are doing. Also please send a pull request if it turns out the library works on other MCU's as well!"
 #endif
 
 
@@ -72,7 +72,7 @@ _BEGIN_STD_C
 
 /* vvv SPI config vvv */
 
-/*#ifndef SSD1306_SPI_PORT
+#ifndef SSD1306_SPI_PORT
 #define SSD1306_SPI_PORT        hspi2
 #endif
 
@@ -96,7 +96,7 @@ _BEGIN_STD_C
 #ifndef SSD1306_Reset_Pin
 #define SSD1306_Reset_Pin       GPIO_PIN_8
 #endif
-*/
+
 /* ^^^ SPI config ^^^ */
 
 #if defined(SSD1306_USE_I2C)
