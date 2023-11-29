@@ -173,11 +173,7 @@ void ssd1306_Init(void) {
 
 /* Fill the whole screen with the given color */
 void ssd1306_Fill(SSD1306_COLOR color) {
-    uint32_t i;
-
-    for(i = 0; i < sizeof(SSD1306_Buffer); i++) {
-        SSD1306_Buffer[i] = (color == Black) ? 0x00 : 0xFF;
-    }
+    memset(SSD1306_Buffer, (color == Black) ? 0x00 : 0xFF, sizeof(SSD1306_Buffer));
 }
 
 /* Write the screenbuffer with changed to the screen */
