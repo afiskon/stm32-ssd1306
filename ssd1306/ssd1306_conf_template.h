@@ -7,9 +7,9 @@
 #define __SSD1306_CONF_H__
 
 // Choose a microcontroller family
-#define STM32F0
+//#define STM32F0
 //#define STM32F1
-//#define STM32F4
+#define STM32F4
 //#define STM32L0
 //#define STM32L1
 //#define STM32L4
