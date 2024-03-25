@@ -325,7 +325,7 @@ static uint16_t ssd1306_NormalizeTo0_360(uint16_t par_deg) {
         loc_angle = par_deg;
     } else {
         loc_angle = par_deg % 360;
-        loc_angle = ((par_deg != 0)?par_deg:360);
+        loc_angle = (loc_angle ? loc_angle : 360);
     }
     return loc_angle;
 }
