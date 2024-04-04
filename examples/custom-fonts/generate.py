@@ -1,11 +1,15 @@
 from PIL import Image, ImageDraw, ImageFont
-import argparse
-import math
+from argparse import ArgumentParser
+from math import ceil
+from sys import hexversion as python_version
 
-arg_parser = argparse.ArgumentParser(
+if python_version < 0x030A00F0:
+    raise RuntimeError('Unsupported Python version. Python 3.10+ required')
+
+arg_parser = ArgumentParser(
     description='Generate C code from TrueType font',
 )
-arg_parser.add_argument('-v', '--version', action='version', version="0.0.1")
+arg_parser.add_argument('-v', '--version', action='version', version="0.0.2")
 arg_parser.add_argument('-f', '--font', required=True,
                         type=str, help="Font file with extension (arial.ttf)")
 arg_parser.add_argument('-s', '--size', required=True, type=int,
@@ -22,10 +26,13 @@ ascii = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcd
 cp1251 = ascii + " ЂЃ‚ѓ„…†‡€‰Љ‹ЊЌЋЏђ‘’“”•–— ™љ›њќћџ ЎўЈ¤Ґ¦§Ё©Є«¬ ®Ї°±Ііґµ¶·ё№є»јЅѕїАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя"
 
 match args.charset:
+    case "ascii":
+        charset = ascii
     case "cp1251":
         charset = cp1251
     case _:
-        charset = ascii
+        with open(args.charset, 'r', encoding='utf-8') as file:
+            charset = file.read()
 charset = [char for char in charset]
 
 try:
@@ -47,7 +54,7 @@ for char in charset:
         x_max = max(x_max, bbox[2])
         y_max = max(y_max, bbox[3])
 max_width = x_max - x_min
-res = (math.ceil(max_width / 16) * 16, y_max - y_min)
+res = (ceil(max_width / 16) * 16, y_max - y_min)
 
 """ Convert font to bytes """
 pixels = []
@@ -63,14 +70,14 @@ if not args.string:
         fnt_name = fnt.getname()
         fd.write(
             f"/** Generated {fnt_name[0]} {fnt_name[1]} {args.size} file by generate.py*/\n")
-        words = [[(char[byte], char[byte + 1] if len(char) > (byte + 1) else 0)
+        words = [[(char[byte], char[byte + 1] if len(char) >= byte else 0)
                   for byte in range(0, len(char), 2)] for char in pixels]
-        fd.write(f"#include <stdint.h>\n")
-        fd.write(f"#include \"ssd1306_fonts.h\"\n\n")
+        fd.write("#include <stdint.h>\n")
+        fd.write("#include \"ssd1306_fonts.h\"\n\n")
         fd.write(f"static const uint16_t Font{max_width}x{res[1]} [] = {{\n")
         for index in range(len(words)):
             char = words[index]
-            assert (len(char) == (res[1] * math.ceil(max_width / 16)))
+            assert (len(char) == (res[1] * ceil(max_width / 16)))
             fd.write(f"/** {charset[index]} **/\n")
             for word in char:
                 fd.write(f"0x{word[0]:02X}{word[1]:02X},")
@@ -102,7 +109,7 @@ if args.string:
 """ Atlas """
 if args.atlas:
     atlas_res = (max_width * 16 + 17, (res[1] + 1) *
-                 math.ceil(len(charset) / 16) + 1)
+                 ceil(len(charset) / 16) + 1)
     atlas = Image.new("RGB", atlas_res, 0)
     d = ImageDraw.Draw(atlas)
     for index in range(len(pixels)):
