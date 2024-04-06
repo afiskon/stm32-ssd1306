@@ -152,6 +152,19 @@ typedef struct {
     const uint8_t *const char_width;    /**< Proportional character width in pixels (NULL for monospaced) */
 } SSD1306_Font_t;
 
+typedef struct {
+    unsigned char* bitmap;
+    uint8_t w;
+    uint8_t h;    
+} SSD1306_bitmap_t;
+
+typedef struct {
+    unsigned char** frame;
+    uint32_t frames;
+    uint8_t w;
+    uint8_t h;    
+} SSD1306_animation_t;
+
 // Procedure definitions
 void ssd1306_Init(void);
 void ssd1306_Fill(SSD1306_COLOR color);
