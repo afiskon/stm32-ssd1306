@@ -254,6 +254,30 @@ void ssd1306_TestRectangleFill() {
   ssd1306_UpdateScreen();
 }
 
+void ssd1306_TestRectangleInvert() {
+#ifdef SSD1306_INCLUDE_FONT_11x18
+  ssd1306_SetCursor(2, 0);
+  ssd1306_WriteString("Black", Font_11x18, White);
+  ssd1306_SetCursor(2, 20);
+  ssd1306_WriteString("on", Font_11x18, White);
+  ssd1306_SetCursor(2, 40);
+  ssd1306_WriteString("White", Font_11x18, White);
+  ssd1306_SetCursor(66, 0);
+  ssd1306_WriteString("White", Font_11x18, White);
+  ssd1306_SetCursor(66, 20);
+  ssd1306_WriteString("on", Font_11x18, White);
+  ssd1306_SetCursor(66, 40);
+  ssd1306_WriteString("Black", Font_11x18, White);
+#else
+  ssd1306_FillCircle(32, 32, 20, White);
+  ssd1306_FillCircle(96, 32, 20, White);
+#endif
+  ssd1306_InvertRectangle(0,0,63,63);
+  /* Test rectangle lies on one 8px page */
+  ssd1306_InvertRectangle(2,58,125,60);
+  ssd1306_UpdateScreen();
+}
+
 void ssd1306_TestCircle() {
   uint32_t delta;
 
@@ -324,6 +348,9 @@ void ssd1306_TestAll() {
     HAL_Delay(3000);
     ssd1306_Fill(Black);
     ssd1306_TestRectangleFill();
+    HAL_Delay(3000);
+    ssd1306_Fill(Black);
+    ssd1306_TestRectangleInvert();
     HAL_Delay(3000);
     ssd1306_Fill(Black);
     ssd1306_TestPolyline();

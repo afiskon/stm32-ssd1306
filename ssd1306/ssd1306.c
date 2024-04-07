@@ -513,6 +513,36 @@ void ssd1306_FillRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD13
     return;
 }
 
+SSD1306_Error_t ssd1306_InvertRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2) {
+  if ((x2 >= SSD1306_WIDTH) || (y2 >= SSD1306_HEIGHT)) {
+    return SSD1306_ERR;
+  }
+  if ((x1 > x2) || (y1 > y2)) {
+    return SSD1306_ERR;
+  }
+  uint32_t i;
+  if ((y1 / 8) != (y2 / 8)) {
+    /* if rectangle doesn't lie on one 8px row */
+    for (uint32_t x = x1; x <= x2; x++) {
+      i = x + (y1 / 8) * SSD1306_WIDTH;
+      SSD1306_Buffer[i] ^= 0xFF << (y1 % 8);
+      i += SSD1306_WIDTH;
+      for (; i < x + (y2 / 8) * SSD1306_WIDTH; i += SSD1306_WIDTH) {
+        SSD1306_Buffer[i] ^= 0xFF;
+      }
+      SSD1306_Buffer[i] ^= 0xFF >> (7 - (y2 % 8));
+    }
+  } else {
+    /* if rectangle lies on one 8px row */
+    const uint8_t mask = (0xFF << (y1 % 8)) & (0xFF >> (7 - (y2 % 8)));
+    for (i = x1 + (y1 / 8) * SSD1306_WIDTH;
+         i <= (uint32_t)x2 + (y2 / 8) * SSD1306_WIDTH; i++) {
+      SSD1306_Buffer[i] ^= mask;
+    }
+  }
+  return SSD1306_OK;
+}
+
 /* Draw a bitmap */
 void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char* bitmap, uint8_t w, uint8_t h, SSD1306_COLOR color) {
     int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
