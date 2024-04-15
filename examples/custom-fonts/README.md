@@ -22,7 +22,7 @@ Font encoding is pretty straightforward. Let's consider Font_6x8 as the smallest
 one:
 
 ```c
-FontDef Font_6x8 = {6,8,Font6x8};
+SSD1306_Font_t Font_6x8 = {6, 8, Font6x8, NULL};
 
 // ...
 
@@ -101,7 +101,11 @@ It generates `font.c` with the required font ready-to-use
 
 **Note:** actual height of generated bitmap may be different
 
-**Hint:** monospace fonts are the best choice
+To generate proportional (non-monospaced) font, add `--proportional` flag
+
+```bash
+./generate.py --font Roboto-Thin.ttf --size 15 --proportional 
+```
 
 You can check preview of generated font in font atlas
 

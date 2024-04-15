@@ -9,6 +9,7 @@
 #define __SSD1306_H__
 
 #include <stddef.h>
+#include <stdint.h>
 #include <_ansi.h>
 
 _BEGIN_STD_C
@@ -55,8 +56,6 @@ _BEGIN_STD_C
 #define SSD1306_X_OFFSET_LOWER 0
 #define SSD1306_X_OFFSET_UPPER 0
 #endif
-
-#include "ssd1306_fonts.h"
 
 /* vvv I2C config vvv */
 
@@ -145,13 +144,21 @@ typedef struct {
     uint8_t y;
 } SSD1306_VERTEX;
 
+/** Font */
+typedef struct {
+	const uint8_t width;                /**< Font width in pixels */
+	const uint8_t height;               /**< Font height in pixels */
+	const uint16_t *const data;         /**< Pointer to font data array */
+    const uint8_t *const char_width;    /**< Proportional character width in pixels (NULL for monospaced) */
+} SSD1306_Font_t;
+
 // Procedure definitions
 void ssd1306_Init(void);
 void ssd1306_Fill(SSD1306_COLOR color);
 void ssd1306_UpdateScreen(void);
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
-char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
-char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color);
+char ssd1306_WriteChar(char ch, SSD1306_Font_t Font, SSD1306_COLOR color);
+char ssd1306_WriteString(char* str, SSD1306_Font_t Font, SSD1306_COLOR color);
 void ssd1306_SetCursor(uint8_t x, uint8_t y);
 void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color);

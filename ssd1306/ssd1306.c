@@ -218,7 +218,7 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color) {
  * Font     => Font waarmee we gaan schrijven
  * color    => Black or White
  */
-char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color) {
+char ssd1306_WriteChar(char ch, SSD1306_Font_t Font, SSD1306_COLOR color) {
     uint32_t i, b, j;
     
     // Check if character is valid
@@ -226,17 +226,17 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color) {
         return 0;
     
     // Check remaining space on current line
-    if (SSD1306_WIDTH < (SSD1306.CurrentX + Font.FontWidth) ||
-        SSD1306_HEIGHT < (SSD1306.CurrentY + Font.FontHeight))
+    if (SSD1306_WIDTH < (SSD1306.CurrentX + Font.width) ||
+        SSD1306_HEIGHT < (SSD1306.CurrentY + Font.height))
     {
         // Not enough space on current line
         return 0;
     }
     
     // Use the font to write
-    for(i = 0; i < Font.FontHeight; i++) {
-        b = Font.data[(ch - 32) * Font.FontHeight + i];
-        for(j = 0; j < Font.FontWidth; j++) {
+    for(i = 0; i < Font.height; i++) {
+        b = Font.data[(ch - 32) * Font.height + i];
+        for(j = 0; j < Font.width; j++) {
             if((b << j) & 0x8000)  {
                 ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR) color);
             } else {
@@ -246,14 +246,14 @@ char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color) {
     }
     
     // The current space is now taken
-    SSD1306.CurrentX += Font.FontWidth;
+    SSD1306.CurrentX += Font.char_width ? Font.char_width[ch - 32] : Font.width;
     
     // Return written char for validation
     return ch;
 }
 
 /* Write full string to screenbuffer */
-char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color) {
+char ssd1306_WriteString(char* str, SSD1306_Font_t Font, SSD1306_COLOR color) {
     while (*str) {
         if (ssd1306_WriteChar(*str, Font, color) != *str) {
             // Char could not be written

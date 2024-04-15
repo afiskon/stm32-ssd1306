@@ -50,6 +50,8 @@
 
 #define SSD1306_INCLUDE_FONT_16x24
 
+#define SSD1306_INCLUDE_FONT_16x15
+
 // The width of the screen can be set using this
 // define. The default value is 128.
 // #define SSD1306_WIDTH           64
