@@ -1,0 +1,5 @@
+build
+Drivers
+startup*.s
+*.svd
+*.ld
