@@ -20,7 +20,7 @@ void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
 }
 
 #elif defined(SSD1306_USE_SPI)
-
+int use_dma = 0;
 void ssd1306_Reset(void) {
     // CS = High (not selected)
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET);
@@ -44,7 +44,10 @@ void ssd1306_WriteCommand(uint8_t byte) {
 void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
     HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_SET); // data
-    HAL_SPI_Transmit(&SSD1306_SPI_PORT, buffer, buff_size, HAL_MAX_DELAY);
+    if(use_dma)
+    	HAL_SPI_Transmit_DMA(&SSD1306_SPI_PORT, buffer, buff_size);
+    else
+    	HAL_SPI_Transmit(&SSD1306_SPI_PORT, buffer, buff_size, HAL_MAX_DELAY);
     HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET); // un-select OLED
 }
 
@@ -177,7 +180,7 @@ void ssd1306_Fill(SSD1306_COLOR color) {
 }
 
 /* Write the screenbuffer with changed to the screen */
-void ssd1306_UpdateScreen(void) {
+/*void ssd1306_UpdateScreen(void) {
     // Write data to each page of RAM. Number of pages
     // depends on the screen height:
     //
@@ -190,6 +193,67 @@ void ssd1306_UpdateScreen(void) {
         ssd1306_WriteCommand(0x10 + SSD1306_X_OFFSET_UPPER);
         ssd1306_WriteData(&SSD1306_Buffer[SSD1306_WIDTH*i],SSD1306_WIDTH);
     }
+}*/
+void ssd1306_UpdateScreenDMARoutine(void);
+uint8_t commandArray[3] = {0xB0, 0x00 + SSD1306_X_OFFSET_LOWER,0x10 + SSD1306_X_OFFSET_UPPER};
+int DMAStateTracker,startUpdateFlag, UpdateStartedFlag = 0;
+
+void ssd1306_UpdateScreen(void)
+{
+	startUpdateFlag = 1;
+	if(!UpdateStartedFlag) //not in the middle of an update
+		ssd1306_UpdateScreenDMARoutine();
+}
+
+void ssd1306_UpdateScreenDMARoutine(void)
+{
+	if(DMAStateTracker == 0)
+	{
+		if(!UpdateStartedFlag)
+		{
+			UpdateStartedFlag = 1;
+			startUpdateFlag = 0;
+			DMAStateTracker++;
+			ssd1306_UpdateScreenDMARoutine();
+			//HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET); // un-select OLED
+		}
+	}
+	else if(DMAStateTracker%2 == 0)
+	{
+		if((DMAStateTracker/2)==(SSD1306_HEIGHT/8))
+		{
+			UpdateStartedFlag = 0;
+			DMAStateTracker = 0;
+			if(startUpdateFlag)
+				ssd1306_UpdateScreenDMARoutine();
+			return;
+		}
+		else
+		{
+			HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
+			HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_SET); // data
+			HAL_SPI_Transmit_DMA(&SSD1306_SPI_PORT, (uint8_t *) &SSD1306_Buffer[SSD1306_WIDTH*((DMAStateTracker/2)-1)], SSD1306_WIDTH);
+			DMAStateTracker++;
+		}
+	}
+	else
+	{
+		commandArray[0] = (0xB0+(DMAStateTracker/2));
+		HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_RESET); // select OLED
+		HAL_GPIO_WritePin(SSD1306_DC_Port, SSD1306_DC_Pin, GPIO_PIN_RESET); // command
+		HAL_SPI_Transmit_DMA(&SSD1306_SPI_PORT, (uint8_t *) &commandArray[0], 3);
+		DMAStateTracker++;
+
+	}
+
+}
+
+
+
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+	HAL_GPIO_WritePin(SSD1306_CS_Port, SSD1306_CS_Pin, GPIO_PIN_SET); // un-select OLED
+	ssd1306_UpdateScreenDMARoutine();
 }
 
 /*
