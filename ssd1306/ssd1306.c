@@ -225,8 +225,10 @@ char ssd1306_WriteChar(char ch, SSD1306_Font_t Font, SSD1306_COLOR color) {
     if (ch < 32 || ch > 126)
         return 0;
     
+    // Char width is not equal to font width for proportional font
+    const uint8_t char_width = Font.char_width ? Font.char_width[ch-32] : Font.width;
     // Check remaining space on current line
-    if (SSD1306_WIDTH < (SSD1306.CurrentX + Font.width) ||
+    if (SSD1306_WIDTH < (SSD1306.CurrentX + char_width) ||
         SSD1306_HEIGHT < (SSD1306.CurrentY + Font.height))
     {
         // Not enough space on current line
@@ -236,7 +238,7 @@ char ssd1306_WriteChar(char ch, SSD1306_Font_t Font, SSD1306_COLOR color) {
     // Use the font to write
     for(i = 0; i < Font.height; i++) {
         b = Font.data[(ch - 32) * Font.height + i];
-        for(j = 0; j < Font.width; j++) {
+        for(j = 0; j < char_width; j++) {
             if((b << j) & 0x8000)  {
                 ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR) color);
             } else {
@@ -246,7 +248,7 @@ char ssd1306_WriteChar(char ch, SSD1306_Font_t Font, SSD1306_COLOR color) {
     }
     
     // The current space is now taken
-    SSD1306.CurrentX += Font.char_width ? Font.char_width[ch - 32] : Font.width;
+    SSD1306.CurrentX += char_width;
     
     // Return written char for validation
     return ch;
