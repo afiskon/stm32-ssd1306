@@ -1,0 +1,9 @@
+---
+BasedOnStyle: LLVM
+ColumnLimit: 100
+IndentWidth: 4
+AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 2
+...
