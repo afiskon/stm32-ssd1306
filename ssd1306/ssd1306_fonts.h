@@ -9,6 +9,9 @@ extern const SSD1306_Font_t Font_6x8;
 #ifdef SSD1306_INCLUDE_FONT_7x10
 extern const SSD1306_Font_t Font_7x10;
 #endif
+#ifdef SSD1306_INCLUDE_FONT_8x10
+extern const SSD1306_Font_t Font_8x10;
+#endif
 #ifdef SSD1306_INCLUDE_FONT_11x18
 extern const SSD1306_Font_t Font_11x18;
 #endif

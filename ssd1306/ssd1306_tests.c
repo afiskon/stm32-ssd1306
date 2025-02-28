@@ -152,6 +152,11 @@ void ssd1306_TestFonts1() {
     y += 18;
     #endif
 
+    #ifdef SSD1306_INCLUDE_FONT_8x10
+	ssd1306_SetCursor(64, y);
+	ssd1306_WriteString("Font 8x10", Font_8x10, White);
+    #endif
+
     #ifdef SSD1306_INCLUDE_FONT_7x10
     ssd1306_SetCursor(2, y);
     ssd1306_WriteString("Font 7x10", Font_7x10, White);
@@ -189,6 +194,30 @@ void ssd1306_TestFonts2() {
 
     ssd1306_UpdateScreen();
 #endif
+}
+
+/*
+* Compares Font 7x10 to Font 8x10
+*/
+void ssd1306_TestCompareFonts(void){
+#if SSD1306_HEIGHT == 64
+	uint8_t y = 16;
+#else
+	uint8_t y = 0;
+#endif
+	ssd1306_Fill(Black);
+
+#ifdef SSD1306_INCLUDE_FONT_8x10
+	ssd1306_SetCursor(2, y);
+	ssd1306_WriteString("8x10 abcABC123$%&", Font_8x10, White);
+	y += 16;
+#endif
+
+#ifdef SSD1306_INCLUDE_FONT_7x10
+	ssd1306_SetCursor(2, y);
+	ssd1306_WriteString("7x10 abcABC123$%&", Font_7x10, White);
+#endif
+	ssd1306_UpdateScreen();
 }
 
 /*
