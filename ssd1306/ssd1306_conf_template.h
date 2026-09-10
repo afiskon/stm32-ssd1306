@@ -19,6 +19,7 @@
 //#define STM32G0
 //#define STM32C0
 //#define STM32U5
+//#define STM32WL
 
 // Choose a bus
 #define SSD1306_USE_I2C
@@ -56,7 +57,7 @@
 
 // The width of the screen can be set using this
 // define. The default value is 128.
-// #define SSD1306_WIDTH           64
+// #define SSD1306_WIDTH           128
 
 // If your screen horizontal axis does not start
 // in column 0 you can use this define to
@@ -65,6 +66,6 @@
 
 // The height can be changed as well if necessary.
 // It can be 32, 64 or 128. The default value is 64.
-// #define SSD1306_HEIGHT          64
+// #define SSD1306_HEIGHT          32
 
 #endif /* __SSD1306_CONF_H__ */
